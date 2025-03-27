@@ -76,27 +76,26 @@
             
             // Tải dữ liệu ban đầu
             loadQuestionData();
-            
+
             // Sự kiện tìm kiếm
-            $("#btnSearch").click(function() {
-                console.log("search");
+            $(document).on("click", "#btnSearch", function () {
                 currentState.search = $("#searchInput").val();
                 currentState.page = 1;
                 loadQuestionData();
             });
-            
+
             // Tìm kiếm khi nhấn Enter
-            $("#searchInput").keypress(function(e) {
+            $(document).on("keypress", "#searchInput", function (e) {
                 if (e.which === 13) {
                     currentState.search = $(this).val();
                     currentState.page = 1;
                     loadQuestionData();
+                    return false; // Ngăn form submit nếu có
                 }
             });
-            
+
             // Thay đổi số lượng bản ghi trên trang
-            $("#pageSizeSelect").change(function() {
-                console.log("size");
+            $(document).on("change", "#pageSizeSelect", function () {
                 currentState.pageSize = $(this).val();
                 currentState.page = 1;
                 loadQuestionData();

@@ -71,5 +71,6 @@ namespace ExamationOnline.Areas.Lecture.Controllers
             TempData["SuccessMessage"] = "Question deleted successfully!";
             return RedirectToAction("List");
         }
+
     }
 }

@@ -40,7 +40,8 @@ namespace ExamationOnline.Repository
 
             if (!string.IsNullOrEmpty(searchQuery))
             {
-                query = query.Where(q => q.Content.Contains(searchQuery) || q.Type.Contains(searchQuery));
+                searchQuery = searchQuery.Trim().ToLower();
+                query = query.Where(q => (q.Content.ToLower().Contains(searchQuery) || q.Type.ToLower().Contains(searchQuery)));
             }
 
             totalRecords = query.Count();

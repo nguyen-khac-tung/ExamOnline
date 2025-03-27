@@ -34,7 +34,7 @@ namespace ExamationOnline
 
             app.MapControllerRoute(
                 name: "areas",
-                pattern: "{area:exists}/{controller}/{action}"
+                pattern: "{area:exists}/{controller}/{action}/{id?}"
             );
 
             app.MapControllerRoute(
