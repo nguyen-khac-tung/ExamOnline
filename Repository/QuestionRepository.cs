@@ -98,8 +98,9 @@ namespace ExamationOnline.Repository
         public Question? GetQuestionById(string questionId)
         {
             return _context.Questions
-                .Include(q => q.Options)
-                .FirstOrDefault(q => q.QuestionId == questionId);
+                    .Include(q => q.Options)
+                    .Include(q => q.Lecture)
+                    .FirstOrDefault(q => q.QuestionId == questionId);
         }
     }
 }

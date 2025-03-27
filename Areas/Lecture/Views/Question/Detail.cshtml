@@ -1,78 +1,136 @@
-﻿
+﻿@model ExamationOnline.Models.Question
 
-<input id="Id" name="Id" type="hidden" value="d57a1e29-9687-4fc9-af11-6780f30b9222" />
-<section class="section mt-3">
-    <div class="bg-white rounded p-3 p-lg-4 p-xl-5 shadow">
-        <h2 class="fs-20 fw600 mb-4">Question Information</h2>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="mb-3 text-break">
-                    <div><label class="fw600" for="QuestionTitle">Question Title</label></div>
-                    <div>What&#x27;s the difference between ERD and EERD</div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3 text-break">
-                    <div class="form-group">
-                        <div><label class="fw600" for="SubjectName">Subject</label></div>
-                        <div>Database Management</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-3 text-break">
-                    <div class="form-group">
-                        <div><label class="fw600" for="QuestionTypeName">Question Type</label></div>
-                        <div>Multiple Choice Question</div>
-                    </div>
-                </div>
-            </div>
+@{
+    ViewData["Title"] = "Question Detail";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="pagetitle mb-sm-0 fw600">Question Detail</h4>
+            <a href="/Lecture/Question/List" class="btn btn-secondary">
+                Back to List
+            </a>
         </div>
     </div>
-    <div class="bg-white rounded p-3 p-lg-4 p-xl-5 shadow mt-4">
-        <h2 class="fs-20 fw600 mb-4">Other Information</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3 text-break">
-                    <div><label class="fw600" for="CreatedAndModified_CreatedByName">Created By</label></div>
-                    <div>Samantha Johnson</div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-3 text-break">
-                    <div>
-                        <label class="fw600" for="CreatedAndModified_FormattedCreatedOn">Created On</label>
-                    </div>
-                    <div class="datetimetext">2025-03-12T21:14</div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3 text-break">
-                    <div><label class="fw600" for="CreatedAndModified_ModifiedByName">Modified By</label></div>
-                    <div></div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-3 text-break">
-                    <div>
-                        <label class="fw600" for="CreatedAndModified_FormattedModifiedOn">Modified On</label>
-                    </div>
-                    <div class="datetimetext"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row mt-4">
+</div>
+
+<section class="section dashboard mt-3">
+    <div class="row">
         <div class="col-12">
-            <a class="btn form-btn btn-secondary hover-boxshadow me-1" href="/question">Back To List</a>
-            <a type="button" class="btn form-btn btn-secondary hover-boxshadow me-1"
-               href="/answer/edit/d57a1e29-9687-4fc9-af11-6780f30b9222">Edit Answer</a>
-            <a class="btn form-btn btn-primary hover-boxshadow"
-               href="/question/edit/d57a1e29-9687-4fc9-af11-6780f30b9222">Edit Question</a>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Question Information</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3 col-sm-4 fw-bold">Question Content:</div>
+                        <div class="col-md-9 col-sm-8">@Model.Content</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3 col-sm-4 fw-bold">Question Type:</div>
+                        <div class="col-md-9 col-sm-8">@Model.Type</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3 col-sm-4 fw-bold">Created By:</div>
+                        <div class="col-md-9 col-sm-8">@(Model.Lecture?.FullName ?? "Unknown")</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3 col-sm-4 fw-bold">Created Date:</div>
+                        <div class="col-md-9 col-sm-8">
+                            @(Model.CreatedDate.HasValue ? Model.CreatedDate.Value.ToString("dd/MM/yyyy HH:mm") : "N/A")
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3 col-sm-4 fw-bold">Has Answer:</div>
+                        <div class="col-md-9 col-sm-8">
+                            @if (Model.HasAnswer == true)
+                            {
+                                <span class="badge bg-success">Yes</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">No</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3 col-sm-4 fw-bold">Status:</div>
+                        <div class="col-md-9 col-sm-8">
+                            @if (Model.IsActive == true)
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Inactive</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Options != null && Model.Options.Any())
+    {
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Answer Options</h5>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th width="10%">Option #</th>
+                                        <th>Content</th>
+                                        <th width="15%">Is Correct</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int optionNumber = 1;
+                                    }
+                                    @foreach (var option in Model.Options)
+                                    {
+                                        <tr class="@(option.IsCorrect == true ? "table-warning" : "")">
+                                            <td class="text-center">@(optionNumber++)</td>
+                                            <td>@option.Content</td>
+                                            <td class="text-center">
+                                                @if (option.IsCorrect == true)
+                                                {
+                                                    <strong> O </strong>
+                                                }
+                                                else
+                                                {
+                                                    <span> X </span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <a href="/Lecture/Question/Edit/@Model.QuestionId" class="btn btn-primary me-2">
+                 Edit Question
+            </a>
+            <a href="/Lecture/Question/List" class="btn btn-secondary">
+                 Back to List
+            </a>
         </div>
     </div>
 </section>

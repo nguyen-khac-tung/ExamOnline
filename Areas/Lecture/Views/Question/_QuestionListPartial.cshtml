@@ -47,7 +47,9 @@
                 {
                     <tr>
                         <td>
-                            <div class="text-wrap text-break">@question.Content</div>
+                            <a href="/Lecture/Question/Detail/@question.QuestionId" class="text-wrap text-break text-decoration-none text-primary fw-bold">
+                                @question.Content
+                            </a>
                         </td>
                         <td>@question.Type</td>
                         <td>@(question.CreatedDate.HasValue ? question.CreatedDate.Value.ToString("dd/MM/yyyy HH:mm") : "-")</td>

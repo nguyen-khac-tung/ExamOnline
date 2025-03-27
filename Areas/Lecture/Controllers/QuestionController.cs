@@ -54,6 +54,25 @@ namespace ExamationOnline.Areas.Lecture.Controllers
         }
 
         [HttpGet]
+        public IActionResult Detail(string id)
+        {
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            var question = _questionRepository.GetQuestionById(id);
+
+            if (question == null)
+            {
+                TempData["ErrorMessage"] = "Question not found.";
+                return RedirectToAction("List");
+            }
+
+            return View(question);
+        }
+
+        [HttpGet]
         public IActionResult Delete(string id)
         {
             if (HttpContext.Session.GetInt32("UserId") == null)
