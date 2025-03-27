@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from auratheme-001-site3.ftempurl.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 26 Mar 2025 07:02:25 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExamEase</title>
+    <meta name="description" content="Write your web application description here">
+    <meta name="keywords" content="Write some keywords here">
+    <meta name="author" content="auratheme">
+    <link rel="icon" type="image/x-icon" href="~/ahome/favicon.ico">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="~/ahome/font/googleapis/index.html">
+    <link rel="preconnect" href="~/ahome/font/gstatic/index.html" crossorigin>
+    <link href="~/ahome/font/googleapis/css283ac.css?family=Poppins:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+          rel="stylesheet">
+    <link id="bootstrap-ltr" rel="stylesheet" href="~/ahome/css/bootstrap.min.css" />
+    <link id="bootstrap-rtl" rel="stylesheet" href="~/ahome/css/bootstrap.rtl.min.css.css" />
+    <link rel="stylesheet" href="~/ahome/css/all.min.css" />
+    <link rel="stylesheet" href="~/ahome/css/stylea1f1.css?v=1.1.8" />
+</head>
+<body data-bs-spy="scroll" data-bs-target="#topright-navbar">
+
+    <!-- ================= Top Navigation Bar ================= -->
+    <!-- Note: the code for top navigation bar cannot be put in partial view. Because if do so, the feature of data-bs-spy to "set nav-item to active on scroll" won't be working -->
+    <header b-loxmy0lpwm id="top-navigation" class="py-2 px-3 px-sm-5 fixed-top bg-transparent scrolled-shadow">
+        <div b-loxmy0lpwm class="container">
+            <div b-loxmy0lpwm class="row justify-content-between align-items-center gx-0">
+                <div b-loxmy0lpwm class="col-5 col-lg-2">
+                    <a b-loxmy0lpwm class="nav-link brandname hover-color-primarycolor ps-0"
+                       href="/Home/Index">ExamEase</a>
+                </div>
+                <div b-loxmy0lpwm class="col-lg-2 d-none d-lg-inline-block">
+                </div>
+                <div b-loxmy0lpwm class="col-lg-8 d-none d-lg-inline-block text-end">
+                    <nav b-loxmy0lpwm id="topright-navbar" class="nav navbar navbar-expand-lg">
+                        <div b-loxmy0lpwm class="container-fluid">
+                            <button b-loxmy0lpwm class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+                                    aria-expanded="false" aria-label="Toggle navigation">
+                                <i b-loxmy0lpwm class="fa-solid fa-bars"></i>
+                            </button>
+                            <div b-loxmy0lpwm
+                                 class="collapse navbar-collapse justify-content-end align-items-end text-end"
+                                 id="navbarNavDropdown">
+                                <ul b-loxmy0lpwm class="navbar-nav">
+                                    <!-- If current page is home page, set href = section id so that 'set nav-item active on scroll' is working -->
+                                    <li b-loxmy0lpwm class="nav-item">
+                                        <a b-loxmy0lpwm class="nav-link active me-1 pe-0 hover-color-primarycolor"
+                                           href="/Home/Index">Home</a>
+                                    </li>
+                                    <li b-loxmy0lpwm class="nav-item">
+                                        <a b-loxmy0lpwm class="nav-link ms-3 me-1 pe-0 hover-color-primarycolor"
+                                           href="/Home/Index#whyus">Benefits</a>
+                                    </li>
+                                    <li b-loxmy0lpwm class="nav-item">
+                                        <a b-loxmy0lpwm class="nav-link ms-3 me-1 pe-0 hover-color-primarycolor"
+                                           href="/Home/Index#features">Features</a>
+                                    </li>
+                                    <li b-loxmy0lpwm class="nav-item">
+                                        <a b-loxmy0lpwm class="nav-link ms-3 me-1 pe-0 hover-color-primarycolor"
+                                           href="/Home/Index#faq">FAQ</a>
+                                    </li>
+                                    <li b-loxmy0lpwm class="nav-item">
+                                        <a b-loxmy0lpwm class="nav-link ms-3 me-1 pe-0 hover-moveup"
+                                           href="/User/Login">
+                                            <span b-loxmy0lpwm
+                                                  class="hover-boxshadow border-0 bg-light color-black hover-bg-primarycolor px-4 py-2 rounded shadow">Login</span>
+                                        </a>
+                                    </li>
+                                    <li b-loxmy0lpwm class="nav-item">
+                                        <a b-loxmy0lpwm class="nav-link ms-2 pe-0 hover-moveup"
+                                           href="/User/Register">
+                                            <span b-loxmy0lpwm
+                                                  class="hover-boxshadow border-0 bg-secondarycolor hover-bg-primarycolor color-white px-4 py-2 shadow rounded">Sign Up</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+                <div b-loxmy0lpwm class="col-1 d-inline-block d-lg-none">
+                    <a b-loxmy0lpwm class="navbar-toggler px-0" data-bs-toggle="offcanvas" href="#offcanvasMobileMenu"
+                       role="button" aria-controls="offcanvasMobileMenu">
+                        <i b-loxmy0lpwm class="fa-solid fa-bars"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main b-loxmy0lpwm class="position-relative">
+        @RenderBody()
+    </main>
+
+    <!-- ================= Footer Section ================= -->
+    <footer class="bg-tertiarycolor py-10 px-3 px-sm-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-lg-3">
+                    <h4 class="pb-2 footer-brand">AuraTheme</h4>
+                    <p>
+                        <strong>Email</strong>: auratheme@outlook.com<br>
+                    </p>
+                    <div>
+                        &copy; Copyright 2025 AuraTheme.<br>All Rights Reserved.
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 pt-4 pt-sm-0">
+                    <h4 class="footer-title pb-2">Useful Links</h4>
+                    <ul class="list-style-none ps-0">
+                        <li class="pb-1">
+                            <a class=""
+                               href="https://auratheme.notion.site/FAQ-24c18b1c67e64af5b9b0f39f118641d2"
+                               target="_blank">ExamEase FAQ Articles</a>
+                        </li>
+                        <li class="pb-1">
+                            <a class="" href="https://1.envato.market/7mjd3g" target="_blank">
+                                Envato
+                                Portfolio
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6 col-lg-3 pt-md-4 pt-lg-0">
+                    <h4 class="footer-title pb-2">Our Products</h4>
+                    <ul class="list-style-none ps-0">
+                        <li class="pb-1">Bootstrap HTML Website Templates</li>
+                        <li class="pb-1">.NET Web Application</li>
+                    </ul>
+                </div>
+                <div class="col-md-6 col-lg-3 pt-md-4 pt-lg-0">
+                    <h4 class="footer-title pb-2">Follow Us</h4>
+                    <p class="mb-4">Follow our social media to get updates or news about the projects.</p>
+                    <a href="https://www.instagram.com/aurathemedesign/" target="_blank"
+                       class="rounded-circle bg-secondarycolor color-white p-2 text-center hover-color-white border-0 hover-bg-primarycolor">
+                        <i class="fa-brands fa-instagram wh-20"></i>
+                    </a>
+                    <a href="https://www.youtube.com/channel/UCd5nvmCXkry-0b9YMjlbP_g" target="_blank"
+                       class="rounded-circle bg-secondarycolor color-white p-2 text-center hover-color-white border-0 hover-bg-primarycolor">
+                        <i class="fa-brands fa-youtube wh-20"></i>
+                    </a>
+                    <a href="https://1.envato.market/7mjd3g" target="_blank"
+                       class="rounded-circle bg-secondarycolor color-white p-2 text-center hover-color-white border-0 hover-bg-primarycolor">
+                        <i class="fa-solid fa-globe wh-20"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Scroll to top button -->
+    <a b-loxmy0lpwm
+       class="scroll-top rounded-circle position-fixed bg-primarycolor color-white hover-color-white hover-moveup hover-boxshadow d-flex align-items-center justify-content-center active">
+        <i b-loxmy0lpwm class="fa-solid fa-arrow-up"></i>
+    </a>
+    <script src="~/ahome/js//jquery-3.6.0.js"></script>
+    <script src="~/ahome/js//popper.min.js"></script>
+    <script src="~/ahome/js//bootstrap.min.js"></script>
+    <script src="~/ahome/js//main7ec3.js?v=1.1.4"></script>
+    <script src="~/ahome/lib/jquery-validation/dist//jquery.validate.js"></script>
+    <script src="~/ahome/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script>
+        var lang = 'en';
+        var rtlCss = document.querySelector("#bootstrap-rtl");
+        var ltrCss = document.querySelector("#bootstrap-ltr");
+        if (lang == "ar") {
+            document.querySelector("html").setAttribute("lang", "ar");
+            document.querySelector("html").setAttribute("dir", "rtl");
+            rtlCss.disabled = false;
+            ltrCss.disabled = true;
+        } else {
+            rtlCss.disabled = true;
+            ltrCss.disabled = false;
+            document.querySelector("html").removeAttribute("lang", "ar");
+            document.querySelector("html").removeAttribute("dir", "rtl");
+        }
+    </script>
+</body>
+</html>
