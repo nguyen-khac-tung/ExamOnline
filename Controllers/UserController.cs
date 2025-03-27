@@ -34,9 +34,8 @@ namespace ExamationOnline.Controllers
             if (account == null) { ViewBag.Message = "Incorrect login information."; return View(); }
             if (account?.IsDelete == true) { ViewBag.Message = "This account has been disabled."; return View(); }
 
-            HttpContext.Session.SetString("UserEmail", account.Email);
+            HttpContext.Session.SetInt32("UserId", account.UserId);
             HttpContext.Session.SetString("UserName", account.FullName);
-            HttpContext.Session.SetString("UserRole", account.Role);
 
             if (account.Role == "Lecture") { return RedirectToAction("List", "Question", new { area = "Lecture" }); }
             if (account.Role == "Student") { return RedirectToAction("List", "Exam", new { area = "Student" }); }

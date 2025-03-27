@@ -64,63 +64,28 @@
 
 @section ScriptOptional {
     <script>
-        var tableIdPrefix = "question";
-        var fileName = "Question"; //the file name for excel and pdf file (Export to excel, pdf feature)
-        var partialview = "question-partialview";
-        var loadTableUrl = "/question/getpartialviewlisting";
-        resetTable();
-
-        function refreshTable(sort, search, pg, size) {
-            if (sort == "undefined" || sort == undefined || sort == null) {
-                sort = "";
-            }
-            if (pg == "undefined" || pg == undefined || pg == null) {
-                pg = 1;
-            }
-            if (size == "undefined" || size == undefined || size == null) {
-                size = "";
-            }
-            if (search == "undefined" || search == undefined || search == null) {
-                let searchinput = document.querySelector('input[name="search"]');
-                if (searchinput != null) {
-                    if (searchinput.value == null || searchinput.value == "") {
-                        search = "";
-                    } else {
-                        search = searchinput.value;
-                    }
-                } else {
-                    search = "";
-                }
-            }
-            $(".spinner-container").removeClass("d-none");
-            var url = `${loadTableUrl}?sort=${sort}&search=${search}&pg=${pg}&size=${size}`;
-            loadData(url);
+        $(document).ready(function () {
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+                    $('.toast-body').html('@TempData["SuccessMessage"]');
+                $('#notifytoast').removeClass('bg-danger').addClass('bg-info');
+                $('.toast-header').removeClass('bg-danger').addClass('bg-info');
+                var toast = new bootstrap.Toast(document.getElementById('notifytoast'));
+                toast.show();
+            </text>
         }
 
-        function resetTable() {
-            $(".spinner-container").removeClass("d-none");
-            var url = loadTableUrl;
-            loadData(url);
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <text>
+                    $('.toast-body').html('@TempData["ErrorMessage"]');
+                $('#notifytoast').removeClass('bg-info').addClass('bg-danger');
+                $('.toast-header').removeClass('bg-info').addClass('bg-danger');
+                var toast = new bootstrap.Toast(document.getElementById('notifytoast'));
+                toast.show();
+            </text>
         }
-
-        function loadData(url) {
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    $(`#${partialview}`).html(data);
-                    formatDateTimeText();
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                })
-                .finally(() => {
-                    $(".spinner-container").addClass("d-none");
                 });
-        }
     </script>
 }
