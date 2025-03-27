@@ -15,7 +15,7 @@
     public class QuestionListingViewModel
     {
         public List<QuestionListViewModel> Questions { get; set; }
-        public int TotalPages { get; set; }
+        public int TotalRecords { get; set; }
         public int CurrentPage { get; set; }
         public int PageSize { get; set; }
         public string SearchQuery { get; set; }

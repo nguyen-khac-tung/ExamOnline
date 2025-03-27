@@ -52,12 +52,13 @@ namespace ExamationOnline
 
             service.AddSession(option =>
             {
-                option.IdleTimeout = TimeSpan.FromMinutes(1);
+                option.IdleTimeout = TimeSpan.FromMinutes(30);
                 option.Cookie.HttpOnly = true;
                 option.Cookie.IsEssential = true;
             });
 
             service.AddTransient<IUserRepository, UserRepository>();
+            service.AddTransient<IQuestionRepository, QuestionRepository>();
 
             service.AddControllersWithViews();
         }

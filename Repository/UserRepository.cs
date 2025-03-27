@@ -28,7 +28,7 @@ namespace ExamationOnline.Repository
                                         && a.Password == accountLogin.Password
                            select new User()
                            {
-                               Email = a.Email,
+                               UserId = a.UserId,
                                FullName = a.FullName,
                                Role = a.Role,
                            }).FirstOrDefault();

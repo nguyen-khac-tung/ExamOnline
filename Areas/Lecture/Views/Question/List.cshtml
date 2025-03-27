@@ -64,28 +64,137 @@
 
 @section ScriptOptional {
     <script>
-        $(document).ready(function () {
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <text>
-                    $('.toast-body').html('@TempData["SuccessMessage"]');
+        $(document).ready(function() {
+            // Khởi tạo biến lưu trạng thái hiện tại
+            let currentState = {
+                search: "",
+                page: 1,
+                pageSize: 5,
+                sortBy: "",
+                sortDir: "desc"
+            };
+            
+            // Tải dữ liệu ban đầu
+            loadQuestionData();
+            
+            // Sự kiện tìm kiếm
+            $("#btnSearch").click(function() {
+                console.log("search");
+                currentState.search = $("#searchInput").val();
+                currentState.page = 1;
+                loadQuestionData();
+            });
+            
+            // Tìm kiếm khi nhấn Enter
+            $("#searchInput").keypress(function(e) {
+                if (e.which === 13) {
+                    currentState.search = $(this).val();
+                    currentState.page = 1;
+                    loadQuestionData();
+                }
+            });
+            
+            // Thay đổi số lượng bản ghi trên trang
+            $("#pageSizeSelect").change(function() {
+                console.log("size");
+                currentState.pageSize = $(this).val();
+                currentState.page = 1;
+                loadQuestionData();
+            });
+
+            // Sự kiện sắp xếp
+            $(document).on("click", ".sortable", function () {
+                const column = $(this).data("sort");
+
+                // Nếu là cùng một cột, đảo chiều sắp xếp
+                if (currentState.sortBy === column) {
+                    currentState.sortDir = currentState.sortDir === "asc" ? "desc" : "asc";
+                } else {
+                    // Nếu là cột khác, đặt là cột mới và sắp xếp tăng dần
+                    currentState.sortBy = column;
+                    currentState.sortDir = "asc";
+                }
+
+                loadQuestionData();
+            });
+
+            // Sự kiện phân trang
+            $(document).on("click", ".pagination .page-link", function() {
+                const page = $(this).data("page");
+                if (page && !$(this).parent().hasClass("disabled")) {
+                    currentState.page = page;
+                    loadQuestionData();
+                }
+            });
+            
+            // Hiển thị thông báo thành công
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <text>
+                $('.toast-body').html('@TempData["SuccessMessage"]');
                 $('#notifytoast').removeClass('bg-danger').addClass('bg-info');
                 $('.toast-header').removeClass('bg-danger').addClass('bg-info');
                 var toast = new bootstrap.Toast(document.getElementById('notifytoast'));
                 toast.show();
-            </text>
-        }
-
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <text>
-                    $('.toast-body').html('@TempData["ErrorMessage"]');
+                </text>
+            }
+            
+            // Hiển thị thông báo lỗi
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <text>
+                $('.toast-body').html('@TempData["ErrorMessage"]');
                 $('#notifytoast').removeClass('bg-info').addClass('bg-danger');
                 $('.toast-header').removeClass('bg-info').addClass('bg-danger');
                 var toast = new bootstrap.Toast(document.getElementById('notifytoast'));
                 toast.show();
-            </text>
-        }
+                </text>
+            }
+            
+            // Hàm tải dữ liệu sử dụng Ajax
+            function loadQuestionData() {
+                $(".spinner-container").removeClass("d-none");
+                
+                $.ajax({
+                    url: "/Lecture/Question/GetPartialViewListing",
+                    type: "GET",
+                    data: {
+                        search: currentState.search,
+                        page: currentState.page,
+                        pageSize: currentState.pageSize,
+                        sortBy: currentState.sortBy,
+                        sortDir: currentState.sortDir
+                    },
+                    success: function(data) {
+                        $("#question-partialview").html(data);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error loading questions:", error);
+                        
+                        // Hiển thị thông báo lỗi
+                        $('.toast-body').html("Error loading questions. Please try again.");
+                        $('#notifytoast').removeClass('bg-info').addClass('bg-danger');
+                        $('.toast-header').removeClass('bg-info').addClass('bg-danger');
+                        var toast = new bootstrap.Toast(document.getElementById('notifytoast'));
+                        toast.show();
+                    },
+                    complete: function() {
+                        $(".spinner-container").addClass("d-none");
+                    }
                 });
+            }
+        });
+        
+        // Hàm kích hoạt modal xác nhận xóa
+        function triggerDeleteConfirmationModal(deleteUrl) {
+            $('#confirmDeleteModal').modal('show');
+            $('#confirmed-deletebtn').attr('data-url', deleteUrl);
+            
+            // Xử lý sự kiện khi nhấn nút xác nhận xóa
+            $('#confirmed-deletebtn').off('click').on('click', function() {
+                const url = $(this).attr('data-url');
+                window.location = url;
+            });
+        }
     </script>
 }

@@ -19,8 +19,7 @@ namespace ExamationOnline.Areas.Lecture.Controllers
             return View();
         }
 
-        public IActionResult GetPartialViewListing(string sortColumn = "", bool isAsc = true,
-            string search = "", int pageIndex = 1, int size = 10)
+        public IActionResult GetPartialViewListing(string search = "", int page = 1, int pageSize = 10, string sortBy = "", string sortDir = "desc")
         {
             int lectureId = HttpContext.Session.GetInt32("UserId") ?? 0;
 
@@ -29,24 +28,26 @@ namespace ExamationOnline.Areas.Lecture.Controllers
                 return PartialView("_QuestionListPartial", new QuestionListingViewModel
                 {
                     Questions = new List<QuestionListViewModel>(),
-                    TotalPages = 0,
+                    TotalRecords = 0,
                     CurrentPage = 1,
-                    PageSize = size
+                    PageSize = pageSize
                 });
             }
 
+            bool isAscending = sortDir.ToLower() == "asc";
+
             var questions = _questionRepository.GetQuestionsByLectureId(
-                lectureId, search, sortColumn, isAsc, size, pageIndex, out int totalRecords);
+                lectureId, search, sortBy, isAscending, pageSize, page, out int totalRecords);
 
             var model = new QuestionListingViewModel
             {
                 Questions = questions,
-                TotalPages = (int)Math.Ceiling((double)totalRecords / size),
-                CurrentPage = pageIndex,
-                PageSize = size,
+                TotalRecords = totalRecords,
+                CurrentPage = page,
+                PageSize = pageSize,
                 SearchQuery = search,
-                SortColumn = sortColumn,
-                IsAscending = isAsc
+                SortColumn = sortBy,
+                IsAscending = isAscending
             };
 
             return PartialView("_QuestionListPartial", model);
