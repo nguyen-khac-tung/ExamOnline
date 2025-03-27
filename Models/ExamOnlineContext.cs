@@ -163,6 +163,7 @@ public partial class ExamOnlineContext : DbContext
             entity.Property(e => e.Content)
                 .IsRequired()
                 .HasMaxLength(500);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.LectureId).HasColumnName("LectureID");
             entity.Property(e => e.Type).HasMaxLength(20);
 

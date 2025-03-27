@@ -13,11 +13,15 @@ public partial class Question
 
     public string Type { get; set; }
 
+    public DateTime? CreatedDate { get; set; }
+
     public bool? HasAnswer { get; set; }
 
     public int? LectureId { get; set; }
 
     public bool? IsActive { get; set; }
+
+    public bool? IsDelete { get; set; }
 
     public virtual ICollection<ExamQuestion> ExamQuestions { get; set; } = new List<ExamQuestion>();
 
