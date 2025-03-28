@@ -1,0 +1,364 @@
+﻿<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active">Edit Exam</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link hover-color-secondarycolor"
+           href="/exam/addquestion/9e786b2f-4651-48bd-9fb4-28e70aeebe63">Add Question</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link hover-color-secondarycolor"
+           href="/exam/sortquestion/9e786b2f-4651-48bd-9fb4-28e70aeebe63">Arrange Question Order</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link hover-color-secondarycolor"
+           href="/exam/allocatemarks/9e786b2f-4651-48bd-9fb4-28e70aeebe63">Allocate Marks</a>
+    </li>
+</ul>
+
+
+<section class="section">
+    <form action="/exam/edit/9e786b2f-4651-48bd-9fb4-28e70aeebe63" class="form-horizontal"
+          enctype="multipart/form-data" method="post" role="form">
+        <input id="Id" name="Id" type="hidden"
+               value="9e786b2f-4651-48bd-9fb4-28e70aeebe63" />
+        <div class="bg-white rounded p-3 p-lg-4 p-xl-5 shadow">
+            <h2 class="fs-20 fw600">Exam Information</h2>
+            <div class="mb-4">
+                Kind Reminder: Please double-check all exam details prior to the exam&#x27;s start
+                date and time to avoid errors while the student is taking the exam.
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3 text-break">
+                        <div class="form-group">
+                            <label class="form-label required fw600" for="Name">Name</label>
+                            <input class="form-control text-box single-line" data-val="true"
+                                   data-val-required="Field is required." id="Name" name="Name" type="text"
+                                   value="exam history" />
+                            <span class="invalid-message field-validation-valid" data-valmsg-for="Name"
+                                  data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3 text-break">
+                        <div class="form-group">
+                            <label class="form-label required fw600" for="Description">Description</label>
+                            <textarea class="form-control" data-val="true"
+                                      data-val-required="Field is required." id="Description" name="Description"
+                                      rows="3">
+asdada</textarea>
+                            <span class="invalid-message field-validation-valid" data-valmsg-for="Description"
+                                  data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3 text-break">
+                        <div class="form-group">
+                            <label class="form-label required fw600" for="StartDate">
+                                Start Date &amp;
+                                Time
+                            </label> <i class="fa-solid fa-circle-info text-info"
+                                        data-bs-toggle="tooltip" data-bs-placement="right"
+                                        title="Student can sit for the exam starting from this date &amp; time."></i>
+                            <div>
+                                <input id="startdate" type="datetime-local" class="w-100 form-control"
+                                       name="StartDateIsoString" value="2025-03-12T19:17" />
+                            </div>
+                            <span class="invalid-message field-validation-valid" data-valmsg-for="StartDate"
+                                  data-valmsg-replace="true"></span>
+                            <input type="text" class="invisible" id="startdate-utc" data-val="true"
+                                   data-val-required="Field is required." name="StartDateIsoUtc"
+                                   value="2025-03-12T19:17" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3 text-break">
+                        <div class="form-group">
+                            <label class="form-label required fw600" for="EndDate">End Date &amp; Time</label>
+                            <i class="fa-solid fa-circle-info text-info" data-bs-toggle="tooltip"
+                               data-bs-placement="right"
+                               title="This is the due date for the student to start the exam. After this date &amp; time, student will be unable to take the exam."></i>
+                            <div>
+                                <input id="enddate" type="datetime-local" class="w-100 form-control"
+                                       name="EndDateIsoString" value="2025-03-23T19:15" />
+                            </div>
+                            <span class="invalid-message field-validation-valid" data-valmsg-for="EndDate"
+                                  data-valmsg-replace="true"></span>
+                            <input type="text" class="invisible" id="enddate-utc" data-val="true"
+                                   data-val-required="Field is required." name="EndDateIsoUtc"
+                                   value="2025-03-23T19:15" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3 text-break">
+                        <div class="form-group">
+                            <label class="form-label required fw600" for="Duration">Duration (minute)</label> <i class="fa-solid fa-circle-info text-info" data-bs-toggle="tooltip"
+                                                                                                                 data-bs-placement="right"
+                                                                                                                 title="Duration (in minute) given to a student to complete the exam. Once the student clicks the &quot;Start Exam&quot; button, the exam will begin counting down from this duration value."></i>
+                            <input class="form-control text-box single-line" data-val="true"
+                                   data-val-required="Field is required." id="Duration" name="Duration"
+                                   type="number" value="14" />
+                            <span class="invalid-message field-validation-valid" data-valmsg-for="Duration"
+                                  data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3 text-break">
+                        <div class="form-group">
+                            <label class="form-label required fw600" for="MarksToPass">Marks To Pass</label>
+                            <input class="form-control text-box single-line" data-val="true"
+                                   data-val-number="The field Marks To Pass must be a number."
+                                   data-val-required="Field is required." id="MarksToPass" max="100" min="0.01"
+                                   name="MarksToPass" step=".01" type="number" value="40.00" />
+                            <span class="invalid-message field-validation-valid" data-valmsg-for="MarksToPass"
+                                  data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3 text-break">
+                        <label class="form-label required fw600" for="ClassIdList">Class</label> <a class="color-secondarycolor fs-12 hover-color-primarycolor" href="/class/edit"
+                                                                                                    target="_blank">Create New</a>
+                        <div>
+                            <select class="multichoice" for="ClassIdList" id="ClassIdList" multiple="multiple"
+                                    name="ClassIdList" placeholder="Select multiple...">
+                                <option value="2c0eb949-d2f4-4f85-90a0-9bfd04750743">css1301</option>
+                                <option value="8c942845-0dd7-4436-ab31-0a719f460363">Hr-Dep1</option>
+                                <option selected="selected" value="a64e51eb-37c7-4bad-8584-bbd9d020a0e6">
+                                    Hr-DepTest2
+                                </option>
+                                <option value="6f51cd81-e6b5-4025-9e39-839d1bf338e8">
+                                    Ibrahim Kabir Yusuf
+                                </option>
+                                <option value="799bbd02-bfe0-42fa-adbf-86c3db57cd18">IT-Dep1</option>
+                                <option value="7251c01e-598d-4399-afc9-becd1de26b2f">Logistic-Dep1</option>
+                            </select>
+                        </div>
+                        <span class="invalid-message field-validation-valid" data-valmsg-for="ClassIdList"
+                              data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3 text-break">
+                        <label class="form-label required fw600" for="SubjectIdList">Subject</label> <a class="color-secondarycolor fs-12 hover-color-primarycolor" href="/subject/edit"
+                                                                                                        target="_blank">Create New</a>
+                        <div>
+                            <select class="multichoice" for="SubjectIdList" id="SubjectIdList"
+                                    multiple="multiple" name="SubjectIdList" placeholder="Select multiple...">
+                                <option value="5a92faf2-ead2-4014-96aa-b8ae0d25d444">AI Learning</option>
+                                <option selected="selected" value="13879130-5fa2-4b1f-9fed-0710e623a021">
+                                    Biology
+                                </option>
+                                <option value="3ad644cc-e635-40ce-9d86-8ac7494ef499">css1301</option>
+                                <option value="227ba6f9-83ed-447c-a367-ad6617c41840">
+                                    Database Management
+                                </option>
+                                <option value="aa6155a1-b5c9-434d-ba1e-7420cb3380a5">Digital Literacy</option>
+                                <option value="6d768cbd-be37-4023-981e-de68ebc5cedc">Engg graphics</option>
+                                <option value="870a0f45-8759-4709-8230-fc422b250d49">english</option>
+                                <option value="026309fb-cf4f-4d99-8a82-52a5e3f37061">java</option>
+                                <option value="5f1f644c-95f0-4a73-bf67-57e2ecfb6be5">Maths</option>
+                                <option value="fde640b0-8ab0-47e6-afe5-15cb87e8247d">
+                                    Operational Research
+                                </option>
+                                <option value="6785d3f2-6def-4ac5-aaaa-9e263969560b">social</option>
+                            </select>
+                        </div>
+                        <span class="invalid-message field-validation-valid" data-valmsg-for="SubjectIdList"
+                              data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-5 text-muted">
+            <h2 class="fs-20 fw600 mt-2 mb-4">Exam Settings</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3 text-break">
+                        <div class="form-group">
+                            <label class="form-label required fw600" for="RandomizeQuestions">
+                                Randomize
+                                Questions
+                            </label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input"
+                                           for="RandomizeQuestions-Yes" id="RandomizeQuestions-Yes"
+                                           name="RandomizeQuestions" type="radio" value="true"></input><label class="form-check-label" for="RandomizeQuestions-Yes">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input checked="checked"
+                                           class="form-check-input" for="RandomizeQuestions-No"
+                                           id="RandomizeQuestions-No" name="RandomizeQuestions" type="radio"
+                                           value="false"></input><label class="form-check-label"
+                                                                        for="RandomizeQuestions-No">No</label>
+                                </div>
+                            </div>
+                            <span class="invalid-message field-validation-valid"
+                                  data-valmsg-for="RandomizeQuestions" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3 text-break">
+                        <div class="form-group">
+                            <label class="form-label required fw600" for="IsActive">Active/Inactive</label>
+                            <div class="select-wrapper">
+                                <div class="select">
+                                    <input class="custom-option" for="IsActive" hidden="hidden"
+                                           id="IsActive" name="IsActive" value="Active"></input>
+                                    <div class="select__trigger">
+                                        <span>Active</span>
+                                        <div class="arrow"><i class="fa-solid fa-caret-down"></i></div>
+                                    </div>
+                                    <div class="custom-options">
+                                        <span class="custom-option" data-text="all"
+                                              data-value="" value="">Please Select...</span><span class="custom-option selected" data-text="Active"
+                                                                                                  data-value="Active" value="Active">Active</span><span class="custom-option" data-text="Inactive" data-value="Inactive"
+                                                                                                                                                        value="Inactive">Inactive</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <input id="ActiveInactiveSelectlist" name="ActiveInactiveSelectlist" type="hidden"
+                                   value="System.Collections.Generic.List`1[Microsoft.AspNetCore.Mvc.Rendering.SelectListItem]" />
+                            <span class="invalid-message field-validation-valid" data-valmsg-for="IsActive"
+                                  data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3 text-break">
+                        <div class="form-group">
+                            <label class="form-label required fw600" for="ReleaseAnswer">
+                                Display Answer to
+                                Student?
+                            </label> <i class="fa-solid fa-circle-info text-info"
+                                        data-bs-toggle="tooltip" data-bs-placement="right"
+                                        title="When a student clicks &quot;exit,&quot; should the question and answer be displayed to the student? We recommend selecting &quot;No&quot; for now. After you finish reviewing all the students&#x27; results, you can change this to &quot;yes&quot; so that the students can study the questions and answers."></i>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input"
+                                           for="ReleaseAnswer-Yes" id="ReleaseAnswer-Yes" name="ReleaseAnswer"
+                                           type="radio" value="true"></input><label class="form-check-label"
+                                                                                    for="ReleaseAnswer-Yes">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input checked="checked"
+                                           class="form-check-input" for="ReleaseAnswer-No" id="ReleaseAnswer-No"
+                                           name="ReleaseAnswer" type="radio" value="false"></input><label class="form-check-label" for="ReleaseAnswer-No">No</label>
+                                </div>
+                            </div>
+                            <span class="invalid-message field-validation-valid" data-valmsg-for="ReleaseAnswer"
+                                  data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+
+                <a class="btn form-btn btn-secondary hover-boxshadow me-1" href="/exam">Back To List</a>
+                <span class="btn form-btn btn-secondary hover-boxshadow me-1 text-muted opacity-50"
+                      data-bs-toggle="tooltip" data-bs-placement="top"
+                      title="You cannot publish the exam now as it doesn&#x27;t have any questions, or, some questions have not yet saved their answers, or you have not yet allocated the marks for each question.">
+                    Publish
+                    Exam
+                </span>
+                <button id="saveBtn" type="button"
+                        class="btn form-btn btn-primary hover-boxshadow">
+                    Save
+                </button>
+                <button id="submitBtn" type="submit" hidden></button>
+
+                <div class="modal fade" id="confirmPublishModal" tabindex="-1"
+                     aria-labelledby="confirmPublishModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header border-0 pt-4">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body border-0 pb-4">
+                                <div class="mt-2 text-center">
+                                    <i class="fa-solid fa-triangle-exclamation color-secondarycolor fs-64"></i>
+                                    <div class="mt-3 pt-2 fs-15 mx-4 mx-sm-5">
+                                        <h4 class="fs-22 fw600">Are you sure to publish this exam?</h4>
+                                        <p class="fs-15 text-muted mx-3 mb-0 pt-1">
+                                            After publishing the exam,
+                                            your student will see this exam appear as their upcoming exam. They
+                                            can start the exam once the exam&#x27;s Start Date &amp; Time have
+                                            been reached.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2 justify-content-center mt-4 mb-3">
+                                    <button type="button" class="btn form-btn btn-secondary hover-boxshadow"
+                                            data-bs-dismiss="modal">
+                                        No, Cancel
+                                    </button>
+                                    <a class="btn form-btn btn-primary hover-boxshadow"
+                                       href="/exam/publish/9e786b2f-4651-48bd-9fb4-28e70aeebe63">
+                                        Yes, Publish
+                                        Now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="confirmUnPublishModal" tabindex="-1"
+                     aria-labelledby="confirmUnPublishModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header border-0 pt-4">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body border-0 pb-4">
+                                <div class="mt-2 text-center">
+                                    <i class="fa-solid fa-triangle-exclamation color-secondarycolor fs-64"></i>
+                                    <div class="mt-3 pt-2 fs-15 mx-4 mx-sm-5">
+                                        <h4 class="fs-22 fw600">Are you sure to unpublish this exam?</h4>
+                                        <p class="fs-15 text-muted mx-3 mb-0 pt-1">
+                                            All students will be forced
+                                            to stop taking the exam if you click this. After you click
+                                            &quot;unpublish&quot;, all the students will not be able to continue
+                                            the exam until you publish it again.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2 justify-content-center mt-4 mb-3">
+                                    <button type="button" class="btn form-btn btn-secondary hover-boxshadow"
+                                            data-bs-dismiss="modal">
+                                        No, Cancel
+                                    </button>
+                                    <a class="btn form-btn btn-primary hover-boxshadow"
+                                       href="/exam/unpublish/9e786b2f-4651-48bd-9fb4-28e70aeebe63">
+                                        Yes,
+                                        Unpublish Now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <input name="__RequestVerificationToken" type="hidden"
+               value="CfDJ8PhlRww5SZZDgQOdb6RELKyvOiJRoudGoY2QKqgUW2asN36QlfrEXuWu35YgKpVVXnsvJz3rNu1NWXVehpi-PXE7z9vJqvb1G6TXT9U2zGIVZ4f3icIb9IJTOYWeZONFBFvMoaBpsMMQYdvL2PFMcl2yYJTbozmVM4d99TQxg1vAvNaauENuSdIcpGoKaRmhSQ" />
+    </form>
+</section>
