@@ -31,6 +31,8 @@ public partial class Exam
 
     public int? LectureId { get; set; }
 
+    public bool? IsDelete { get; set; }
+
     public virtual Class Class { get; set; }
 
     public virtual ICollection<ExamQuestion> ExamQuestions { get; set; } = new List<ExamQuestion>();
