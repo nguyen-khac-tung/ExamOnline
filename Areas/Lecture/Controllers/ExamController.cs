@@ -54,6 +54,19 @@ namespace ExamationOnline.Areas.Lecture.Controllers
         }
 
         [HttpGet]
+        public IActionResult Detail(string id)
+        {
+            var exam = _examRepository.GetExamDetailWithQuestions(id);
+            if (exam == null)
+            {
+                TempData["ErrorMessage"] = "Exam not found.";
+                return RedirectToAction("List");
+            }
+
+            return View(exam);
+        }
+
+        [HttpGet]
         public IActionResult Delete(string id)
         {
             _examRepository.DeleteExam(id);

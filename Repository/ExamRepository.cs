@@ -9,7 +9,7 @@ namespace ExamationOnline.Repository
         List<ExamListViewModel> GetExamsByLectureId(int lectureId, string searchQuery,
             string sortColumn, bool isAsc, int pageSize, int pageNumber, out int totalRecords);
         void DeleteExam(string examId);
-        //Exam? GetExamById(string examId);
+        public Exam? GetExamDetailWithQuestions(string examId);
     }
 
     public class ExamRepository: IExamRepository
@@ -97,6 +97,19 @@ namespace ExamationOnline.Repository
             var exam = _context.Exams.Find(examId);
             exam.IsDelete = true;
             _context.SaveChanges();
+        }
+
+        public Exam? GetExamDetailWithQuestions(string examId)
+        {
+            return _context.Exams
+                .Include(e => e.Status)
+                .Include(e => e.Subject)
+                .Include(e => e.Class)
+                .Include(e => e.Lecture)
+                .Include(e => e.ExamQuestions)
+                    .ThenInclude(eq => eq.Question)
+                        .ThenInclude(q => q.Options)
+                .FirstOrDefault(e => e.ExamId == examId);
         }
     }
 }
