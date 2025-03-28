@@ -5,7 +5,7 @@
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
             <h4 class="pagetitle mb-sm-0 fw600">Create New Question</h4>
             <a href="/Lecture/Question/List" class="btn btn-secondary">
-               Back to List
+                Back to List
             </a>
         </div>
     </div>
@@ -67,14 +67,14 @@
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <h6 class="card-subtitle option-number">Option 1</h6>
                                         <button type="button" class="btn btn-sm btn-danger remove-option">
-                                           Remove
+                                            Remove
                                         </button>
                                     </div>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" name="Options.Content" placeholder="Enter option content" />
+                                        <input type="text" class="form-control option-content" name="Options[0].Content" placeholder="Enter option content" required/>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input correct-answer" type="checkbox" name="Options.IsCorrect" value="true" />
+                                        <input class="form-check-input correct-answer" type="checkbox" name="Options[0].IsCorrect" value="true" />
                                         <label class="form-check-label">
                                             This is the correct answer
                                         </label>
@@ -106,41 +106,52 @@
 
             $("#addOptionBtn").click(function () {
                 var newOption = `
-                                <div class="option-row card mb-3">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <h6 class="card-subtitle option-number">Option</h6>
-                                            <button type="button" class="btn btn-sm btn-danger remove-option">
-                                                Remove
-                                            </button>
-                                        </div>
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control"  name="Options.Content" placeholder="Enter option content"/>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input correct-answer" type="checkbox" name="Options.IsCorrect" value="true" />
-                                            <label class="form-check-label">
-                                                This is the correct answer
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
+                                            <div class="option-row card mb-3">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <h6 class="card-subtitle option-number"></h6>
+                                                        <button type="button" class="btn btn-sm btn-danger remove-option">
+                                                            Remove
+                                                        </button>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <input type="text" class="form-control option-content"  name="" placeholder="Enter option content" required/>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input correct-answer" type="checkbox" name="" value="true" />
+                                                        <label class="form-check-label">
+                                                            This is the correct answer
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `;
 
                 $("#optionsContainer").append(newOption);
                 updateOptionNumbers();
+                updateOptionIndexes();
             });
 
             // Xóa option
             $(document).on("click", ".remove-option", function () {
                 $(this).closest(".option-row").remove();
                 updateOptionNumbers();
+                updateOptionIndexes();
             });
 
             // Cập nhật số thứ tự của các option
             function updateOptionNumbers() {
                 $("#optionsContainer .option-row").each(function (index) {
                     $(this).find(".option-number").text("Option " + (index + 1));
+                });
+            }
+
+            // Cập nhật indexes
+            function updateOptionIndexes() {
+                $("#optionsContainer .option-row").each(function (index) {
+                    $(this).find(".option-content").attr('name', 'Options[' + index + '].Content');
+
+                    $(this).find(".correct-answer").attr('name', 'Options[' + index + '].IsCorrect');
                 });
             }
         });

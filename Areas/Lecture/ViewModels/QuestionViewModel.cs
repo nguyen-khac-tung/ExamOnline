@@ -38,12 +38,13 @@ namespace ExamationOnline.Areas.Lecture.ViewModels
 
         public int? LectureID { get; set; }
 
-        public List<OptionViewModel> Options { get; set; } = new List<OptionViewModel>();
+        public List<OptionViewModel>? Options { get; set; }
     }
 
     public class OptionViewModel
     {
-        public string? Content { get; set; }
+        [Required(ErrorMessage = "Option content is required")]
+        public string Content { get; set; }
 
         public bool? IsCorrect { get; set; } = false;
     }
