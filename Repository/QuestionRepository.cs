@@ -11,7 +11,9 @@ namespace ExamationOnline.Repository
         bool IsQuestionInExam(string questionId);
         void DeleteQuestion(string questionId);
         Question? GetQuestionById(string questionId);
-        string CreateQuestion(QuestionCreateViewModel model);
+        string CreateQuestion(QuestionViewModel model);
+        QuestionViewModel GetQuestionVMById(string questionId);
+        string UpdateQuestion(QuestionViewModel model);
     }
 
     public class QuestionRepository : IQuestionRepository
@@ -104,7 +106,7 @@ namespace ExamationOnline.Repository
                     .FirstOrDefault(q => q.QuestionId == questionId);
         }
 
-        public string CreateQuestion(QuestionCreateViewModel model)
+        public string CreateQuestion(QuestionViewModel model)
         {
             string questionId = Guid.NewGuid().ToString();
             var question = new Question
@@ -138,6 +140,59 @@ namespace ExamationOnline.Repository
 
             _context.SaveChanges();
             return questionId;
+        }
+
+        public QuestionViewModel GetQuestionVMById(string questionId)
+        {
+            var question = _context.Questions
+                .Include(q => q.Options)
+                .FirstOrDefault(q => q.QuestionId == questionId);
+
+            var model = new QuestionViewModel
+            {
+                QuestionId = question.QuestionId,
+                Content = question.Content,
+                Type = question.Type,
+                IsActive = question.IsActive ?? true,
+                LectureID = question.LectureId,
+                Options = question.Options.Select(o => new OptionViewModel
+                {
+                    OptionId = o.OptionId,
+                    Content = o.Content,
+                    IsCorrect = o.IsCorrect ?? false
+                }).ToList()
+            };
+
+            return model;
+        }
+
+        public string UpdateQuestion(QuestionViewModel model)
+        {
+            var question = _context.Questions.FirstOrDefault(q => q.QuestionId == model.QuestionId);
+            question.Content = model.Content;
+            question.Type = model.Type;
+            question.IsActive = model.IsActive;
+
+            var oldOptions = _context.Options.Where(o => o.QuestionId == model.QuestionId).ToList();
+            _context.Options.RemoveRange(oldOptions);
+
+            if (model.Options != null && model.Options.Count > 0)
+            {
+                foreach (var optionModel in model.Options)
+                {
+                    var option = new Option
+                    {
+                        Content = optionModel.Content,
+                        IsCorrect = optionModel.IsCorrect,
+                        QuestionId = model.QuestionId
+                    };
+
+                    _context.Options.Add(option);
+                }
+            }
+
+            _context.SaveChanges();
+            return model.QuestionId;
         }
     }
 }

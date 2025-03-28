@@ -68,13 +68,13 @@ namespace ExamationOnline.Areas.Lecture.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var model = new QuestionCreateViewModel();
+            var model = new QuestionViewModel();
             model.Options.Add(new OptionViewModel());
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Create(QuestionCreateViewModel model)
+        public IActionResult Create(QuestionViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -98,6 +98,40 @@ namespace ExamationOnline.Areas.Lecture.Controllers
 
             int lectureId = HttpContext.Session.GetInt32("UserId") ?? 0;
             model.LectureID = lectureId;
+            string questionId = _questionRepository.CreateQuestion(model);
+            return RedirectToAction("Detail", new { id = questionId });
+        }
+
+        [HttpGet]
+        public IActionResult Edit(string id)
+        {
+            var model = _questionRepository.GetQuestionVMById(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(QuestionViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (model.Options.Any())
+            {
+                if (model.Options.Count < 2)
+                {
+                    ModelState.AddModelError("", "You must provide at least 2 options if you want to add options.");
+                    return View(model);
+                }
+
+                if (!model.Options.Any(o => o.IsCorrect == true))
+                {
+                    ModelState.AddModelError("", "You must select at least one correct answer.");
+                    return View(model);
+                }
+            }
+
             string questionId = _questionRepository.CreateQuestion(model);
             return RedirectToAction("Detail", new { id = questionId });
         }

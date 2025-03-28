@@ -25,8 +25,10 @@ namespace ExamationOnline.Areas.Lecture.ViewModels
         public bool IsAscending { get; set; }
     }
 
-    public class QuestionCreateViewModel
+    public class QuestionViewModel
     {
+        public string? QuestionId { get; set; }
+
         [Required(ErrorMessage = "Question content is required")]
         [MinLength(10, ErrorMessage = "Question content must be at least 10 characters")]
         public string Content { get; set; }
@@ -43,7 +45,8 @@ namespace ExamationOnline.Areas.Lecture.ViewModels
 
     public class OptionViewModel
     {
-        [Required(ErrorMessage = "Option content is required")]
+        public int? OptionId { get; set; }
+
         public string Content { get; set; }
 
         public bool? IsCorrect { get; set; } = false;
