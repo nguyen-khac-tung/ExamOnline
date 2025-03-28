@@ -139,11 +139,6 @@ namespace ExamationOnline.Areas.Lecture.Controllers
         [HttpGet]
         public IActionResult Delete(string id)
         {
-            if (HttpContext.Session.GetInt32("UserId") == null)
-            {
-                return RedirectToAction("Login", "User");
-            }
-
             if (_questionRepository.IsQuestionInExam(id))
             {
                 TempData["ErrorMessage"] = "Can't delete this question because it is used in exam(s).";

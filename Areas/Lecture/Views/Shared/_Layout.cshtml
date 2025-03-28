@@ -52,13 +52,13 @@
                             <li>
                                 <a id="myprofile" class="dropdown-item d-flex align-items-center fs-14"
                                    href="/account/myprofile">
-                                   <span> My Profile</span>
+                                    <span> My Profile</span>
                                 </a>
                             </li>
                             <li>
                                 <a id="changepassword" class="dropdown-item d-flex align-items-center fs-14"
                                    href="/account/changepassword">
-                                   <span> Change Password </span>
+                                    <span> Change Password </span>
                                 </a>
                             </li>
                             <li>
@@ -83,17 +83,17 @@
     <aside id="sidebar-default" class="sidebar d-none d-md-block" tabindex="-1">
         <ul class="sidebar-nav" id="sidebar-nav">
             @* <li class="nav-item mt-3">
-                <a class="nav-link " href="/dashboard">
-                    <span>Dashboard</span>
-                </a>
+            <a class="nav-link " href="/dashboard">
+            <span>Dashboard</span>
+            </a>
             </li> *@
             <li class="nav-item">
-                <a class="nav-link active" href="/question">
+                <a class="nav-link active" href="/Lecture/Question/List">
                     <span>Question Management</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link " href="/exam">
+                <a class="nav-link " href="/Lecture/Exam/List">
                     <span>Exam Management</span>
                 </a>
             </li>
@@ -223,6 +223,20 @@
             var imgElement = document.getElementById("profilePicture");
             imgElement.src = "/UploadedFiles/" + "";
         }
+
+        $(document).ready(function () {
+            var currentUrl = window.location.pathname;
+
+            $(".nav-link").removeClass("active");
+
+            $(".nav-link").each(function () {
+                var linkUrl = $(this).attr("href");
+                if (currentUrl.includes(linkUrl) && linkUrl !== "/") {
+                    $(this).addClass("active");
+                }
+            });
+
+        });
 
         function triggerDeleteConfirmationModal(deleteUrl) {
             $('#confirmDeleteModal').modal('show');
