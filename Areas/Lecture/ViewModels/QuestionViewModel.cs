@@ -38,7 +38,7 @@ namespace ExamationOnline.Areas.Lecture.ViewModels
 
         public int? LectureID { get; set; }
 
-        public List<OptionViewModel>? Options { get; set; }
+        public List<OptionViewModel> Options { get; set; } = new List<OptionViewModel>();
     }
 
     public class OptionViewModel

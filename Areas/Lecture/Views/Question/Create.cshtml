@@ -62,25 +62,28 @@
                         </div>
 
                         <div id="optionsContainer">
-                            <div class="option-row card mb-3">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <h6 class="card-subtitle option-number">Option 1</h6>
-                                        <button type="button" class="btn btn-sm btn-danger remove-option">
-                                            Remove
-                                        </button>
-                                    </div>
-                                    <div class="mb-3">
-                                        <input type="text" class="form-control option-content" name="Options[0].Content" placeholder="Enter option content" required/>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input correct-answer" type="checkbox" name="Options[0].IsCorrect" value="true" />
-                                        <label class="form-check-label">
-                                            This is the correct answer
-                                        </label>
+                            @for (int i = 0; i < Model.Options.Count; i++)
+                            {
+                                <div class="option-row card mb-3">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="card-subtitle option-number">Option @(i + 1)</h6>
+                                            <button type="button" class="btn btn-sm btn-danger remove-option">
+                                                Remove
+                                            </button>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control option-content" name="Options[@i].Content" value="@Model.Options[i].Content" placeholder="Enter option content" required />
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input correct-answer" type="checkbox" name="Options[@i].IsCorrect" value="true" @(Model.Options[i].IsCorrect == true ? "checked" : "") />
+                                            <label class="form-check-label">
+                                                This is the correct answer
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -106,26 +109,26 @@
 
             $("#addOptionBtn").click(function () {
                 var newOption = `
-                                            <div class="option-row card mb-3">
-                                                <div class="card-body">
-                                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                                        <h6 class="card-subtitle option-number"></h6>
-                                                        <button type="button" class="btn btn-sm btn-danger remove-option">
-                                                            Remove
-                                                        </button>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <input type="text" class="form-control option-content"  name="" placeholder="Enter option content" required/>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input correct-answer" type="checkbox" name="" value="true" />
-                                                        <label class="form-check-label">
-                                                            This is the correct answer
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        `;
+                            <div class="option-row card mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="card-subtitle option-number"></h6>
+                                        <button type="button" class="btn btn-sm btn-danger remove-option">
+                                            Remove
+                                        </button>
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control option-content"  name="" placeholder="Enter option content" required/>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input correct-answer" type="checkbox" name="" value="true" />
+                                        <label class="form-check-label">
+                                            This is the correct answer
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
 
                 $("#optionsContainer").append(newOption);
                 updateOptionNumbers();
@@ -154,6 +157,14 @@
                     $(this).find(".correct-answer").attr('name', 'Options[' + index + '].IsCorrect');
                 });
             }
+
+            // Đảm bảo chỉ có một đáp án đúng được chọn
+            $(document).on("change", ".correct-answer", function () {
+                if ($(this).prop("checked")) {
+                    $(".correct-answer").not(this).prop("checked", false);
+                }
+            });
+
         });
     </script>
 }

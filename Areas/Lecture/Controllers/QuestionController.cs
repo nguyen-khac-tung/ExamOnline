@@ -68,7 +68,9 @@ namespace ExamationOnline.Areas.Lecture.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            var model = new QuestionCreateViewModel();
+            model.Options.Add(new OptionViewModel());
+            return View(model);
         }
 
         [HttpPost]
@@ -79,7 +81,7 @@ namespace ExamationOnline.Areas.Lecture.Controllers
                 return View(model);
             }
 
-            if (model.Options != null)
+            if (model.Options.Any())
             {
                 if (model.Options.Count < 2)
                 {
