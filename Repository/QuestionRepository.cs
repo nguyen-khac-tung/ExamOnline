@@ -11,6 +11,7 @@ namespace ExamationOnline.Repository
         bool IsQuestionInExam(string questionId);
         void DeleteQuestion(string questionId);
         Question? GetQuestionById(string questionId);
+        string CreateQuestion(QuestionCreateViewModel model);
     }
 
     public class QuestionRepository : IQuestionRepository
@@ -101,6 +102,42 @@ namespace ExamationOnline.Repository
                     .Include(q => q.Options)
                     .Include(q => q.Lecture)
                     .FirstOrDefault(q => q.QuestionId == questionId);
+        }
+
+        public string CreateQuestion(QuestionCreateViewModel model)
+        {
+            string questionId = Guid.NewGuid().ToString();
+            var question = new Question
+            {
+                QuestionId = questionId,
+                Content = model.Content,
+                Type = model.Type,
+                LectureId = model.LectureID,
+                IsActive = model.IsActive,
+                CreatedDate = DateTime.Now,
+                HasAnswer = model.Options.Any(),
+                IsDelete = false
+            };
+
+            _context.Questions.Add(question);
+
+            if (model.Options != null && model.Options.Count > 0)
+            {
+                foreach (var optionModel in model.Options)
+                {
+                    var option = new Option
+                    {
+                        Content = optionModel.Content,
+                        IsCorrect = optionModel.IsCorrect,
+                        QuestionId = questionId
+                    };
+
+                    _context.Options.Add(option);
+                }
+            }
+
+            _context.SaveChanges();
+            return questionId;
         }
     }
 }

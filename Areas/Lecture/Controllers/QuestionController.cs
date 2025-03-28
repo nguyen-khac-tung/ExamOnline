@@ -56,20 +56,48 @@ namespace ExamationOnline.Areas.Lecture.Controllers
         [HttpGet]
         public IActionResult Detail(string id)
         {
-            if (HttpContext.Session.GetInt32("UserId") == null)
-            {
-                return RedirectToAction("Login", "User");
-            }
-
             var question = _questionRepository.GetQuestionById(id);
-
             if (question == null)
             {
                 TempData["ErrorMessage"] = "Question not found.";
                 return RedirectToAction("List");
             }
-
             return View(question);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(QuestionCreateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (model.Options != null)
+            {
+                if (model.Options.Count < 2)
+                {
+                    ModelState.AddModelError("", "You must provide at least 2 options if you want to add options.");
+                    return View(model);
+                }
+
+                if (!model.Options.Any(o => o.IsCorrect == true))
+                {
+                    ModelState.AddModelError("", "You must select at least one correct answer.");
+                    return View(model);
+                }
+            }
+
+            int lectureId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            model.LectureID = lectureId;
+            string questionId = _questionRepository.CreateQuestion(model);
+            return RedirectToAction("Detail", new { id = questionId });
         }
 
         [HttpGet]
