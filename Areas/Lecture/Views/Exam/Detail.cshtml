@@ -1,0 +1,216 @@
+﻿<input id="Id" name="Id" type="hidden" value="5a735daf-fb48-4563-ba68-b588f72e91c8" />
+<section class="section mt-3">
+    <div class="bg-white rounded p-3 p-lg-4 p-xl-5 shadow">
+        <h2 class="fs-20 fw600 mb-4">Exam Information</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div><label class="fw600" for="Name">Name</label></div>
+                    <div>test1457</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div><label class="fw600" for="Description">Description</label></div>
+                    <div>ggg</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div><label class="fw600" for="StartDate">Start Date &amp; Time</label></div>
+                    <div class="datetimetext">2025-03-25T06:34</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div><label class="fw600" for="EndDate">End Date &amp; Time</label></div>
+                    <div class="datetimetext">2025-03-27T06:34</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div><label class="fw600" for="Duration">Duration (minute)</label></div>
+                    <div>50</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div><label class="fw600" for="MarksToPass">Marks To Pass</label></div>
+                    <div>10.00</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div><label class="fw600" for="ClassName">Class</label></div>
+                    <div>Hr-Dep1</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div><label class="fw600" for="SubjectName">Subject</label></div>
+                    <div>Biology</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div><label class="fw600" for="RandomizeQuestions">Randomize Questions</label></div>
+                    <div>Yes</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div><label class="fw600" for="IsActive">Active/Inactive</label></div>
+                    <div>Active</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div><label class="fw600" for="ReleaseAnswer">Display Answer to Student?</label></div>
+                    <div>No</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div><label class="fw600" for="ExamStatus">Status</label></div>
+                    <div>
+                        <span class="badge bg-danger fw500 fs-13">Ended</span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded p-3 p-lg-4 p-xl-5 shadow mt-4">
+        <h2 class="fs-20 fw600 mb-4">Other Information</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div><label class="fw600" for="CreatedAndModified_CreatedByName">Created By</label></div>
+                    <div>Samantha Johnson</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div>
+                        <label class="fw600" for="CreatedAndModified_FormattedCreatedOn">Created On</label>
+                    </div>
+                    <div class="datetimetext">2025-03-26T06:36</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div><label class="fw600" for="CreatedAndModified_ModifiedByName">Modified By</label></div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 text-break">
+                    <div>
+                        <label class="fw600" for="CreatedAndModified_FormattedModifiedOn">Modified On</label>
+                    </div>
+                    <div class="datetimetext"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+
+            <a class="btn form-btn btn-secondary hover-boxshadow me-1" href="/exam">Back To List</a>
+            <span class="btn form-btn btn-secondary hover-boxshadow me-1 text-muted opacity-50"
+                  data-bs-toggle="tooltip" data-bs-placement="top"
+                  title="You cannot publish the exam now as it doesn&#x27;t have any questions, or, some questions have not yet saved their answers, or you have not yet allocated the marks for each question.">
+                Publish
+                Exam
+            </span>
+            <a class="btn form-btn btn-primary hover-boxshadow me-1"
+               href="/exam/edit/5a735daf-fb48-4563-ba68-b588f72e91c8">Edit Exam</a>
+
+            <div class="modal fade" id="confirmPublishModal" tabindex="-1"
+                 aria-labelledby="confirmPublishModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header border-0 pt-4">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body border-0 pb-4">
+                            <div class="mt-2 text-center">
+                                <i class="fa-solid fa-triangle-exclamation color-secondarycolor fs-64"></i>
+                                <div class="mt-3 pt-2 fs-15 mx-4 mx-sm-5">
+                                    <h4 class="fs-22 fw600">Are you sure to publish this exam?</h4>
+                                    <p class="fs-15 text-muted mx-3 mb-0 pt-1">
+                                        After publishing the exam, your
+                                        student will see this exam appear as their upcoming exam. They can start
+                                        the exam once the exam&#x27;s Start Date &amp; Time have been reached.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2 justify-content-center mt-4 mb-3">
+                                <button type="button" class="btn form-btn btn-secondary hover-boxshadow"
+                                        data-bs-dismiss="modal">
+                                    No, Cancel
+                                </button>
+                                <a class="btn form-btn btn-primary hover-boxshadow"
+                                   href="/exam/publish/5a735daf-fb48-4563-ba68-b588f72e91c8">
+                                    Yes, Publish
+                                    Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="confirmUnPublishModal" tabindex="-1"
+                 aria-labelledby="confirmUnPublishModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header border-0 pt-4">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body border-0 pb-4">
+                            <div class="mt-2 text-center">
+                                <i class="fa-solid fa-triangle-exclamation color-secondarycolor fs-64"></i>
+                                <div class="mt-3 pt-2 fs-15 mx-4 mx-sm-5">
+                                    <h4 class="fs-22 fw600">Are you sure to unpublish this exam?</h4>
+                                    <p class="fs-15 text-muted mx-3 mb-0 pt-1">
+                                        All students will be forced to
+                                        stop taking the exam if you click this. After you click
+                                        &quot;unpublish&quot;, all the students will not be able to continue the
+                                        exam until you publish it again.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2 justify-content-center mt-4 mb-3">
+                                <button type="button" class="btn form-btn btn-secondary hover-boxshadow"
+                                        data-bs-dismiss="modal">
+                                    No, Cancel
+                                </button>
+                                <a class="btn form-btn btn-primary hover-boxshadow"
+                                   href="/exam/unpublish/5a735daf-fb48-4563-ba68-b588f72e91c8">
+                                    Yes, Unpublish
+                                    Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
