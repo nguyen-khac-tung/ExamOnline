@@ -1,3 +1,4 @@
+using ExamationOnline.Helper;
 using ExamationOnline.Models;
 using ExamationOnline.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +63,8 @@ namespace ExamationOnline
             service.AddTransient<IExamRepository, ExamRepository>();
             service.AddTransient<IClassRepository, ClassRepository>();
             service.AddTransient<ISubjectRepository, SubjectRepository>();
+
+            service.AddHostedService<ExamStatusService>();
 
             service.AddControllersWithViews();
         }
