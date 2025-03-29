@@ -57,6 +57,46 @@ namespace ExamationOnline.Areas.Student.Controllers
             return PartialView("_ExamListPartial", model);
         }
 
+        public IActionResult ListPastExam()
+        {
+            return View();
+        }
+
+        public IActionResult GetPartialViewPastExamListing(string search = "", int page = 1, int pageSize = 10,
+            string sortBy = "", string sortDir = "desc")
+        {
+            int studentId = HttpContext.Session.GetInt32("UserId") ?? 0;
+
+            if (studentId == 0)
+            {
+                return PartialView("_PastExamListPartial", new StudentExamListingViewModel
+                {
+                    Exams = new List<StudentExamListViewModel>(),
+                    TotalRecords = 0,
+                    CurrentPage = 1,
+                    PageSize = pageSize
+                });
+            }
+
+            bool isAscending = sortDir.ToLower() == "asc";
+
+            var exams = _studentExamRepository.GetPastExams(
+                studentId, search, sortBy, isAscending, pageSize, page, out int totalRecords);
+
+            var model = new StudentExamListingViewModel
+            {
+                Exams = exams,
+                TotalRecords = totalRecords,
+                CurrentPage = page,
+                PageSize = pageSize,
+                SearchQuery = search,
+                SortColumn = sortBy,
+                IsAscending = isAscending
+            };
+
+            return PartialView("_PastExamListPartial", model);
+        }
+
         [HttpGet]
         public IActionResult ConfirmTakeExam(string id)
         {

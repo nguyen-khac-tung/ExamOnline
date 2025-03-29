@@ -6,9 +6,11 @@
         public string ExamName { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public DateTime? CreateDate { get; set; }
         public int Duration { get; set; }
         public int? TotalQuestion { get; set; }
         public bool HasTaken { get; set; }
+        public int? CorrectAnswers { get; set; }
     }
 
     public class StudentExamListingViewModel

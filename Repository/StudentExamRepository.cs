@@ -8,6 +8,8 @@ namespace ExamationOnline.Repository
     {
         List<StudentExamListViewModel> GetCurrentExams(int studentId, string searchQuery,
             string sortColumn, bool isAsc, int pageSize, int pageNumber, out int totalRecords);
+        List<StudentExamListViewModel> GetPastExams(int studentId, string searchQuery,
+           string sortColumn, bool isAsc, int pageSize, int pageNumber, out int totalRecords);
         bool HasStudentTakenExam(int studentId, string examId);
         Exam? GetExamById(string examId);
         Exam? GetExamWithQuestions(string examId);
@@ -64,6 +66,62 @@ namespace ExamationOnline.Repository
                     EndDate = e.EndDate,
                     Duration = e.Duration,
                     TotalQuestion = e.TotalQuestion,
+                });
+
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                searchQuery = searchQuery.Trim().ToLower();
+                query = query.Where(e => e.ExamName.ToLower().Contains(searchQuery));
+            }
+
+            totalRecords = query.Count();
+
+            query = OrderListExam(query, sortColumn, isAsc);
+
+            var pagedExams = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+            return pagedExams;
+        }
+
+        public List<StudentExamListViewModel> GetPastExams(int studentId, string searchQuery,
+            string sortColumn, bool isAsc, int pageSize, int pageNumber, out int totalRecords)
+        {
+            // Get classes for the student
+            var studentClasses = _context.ClassUsers
+                .Where(cu => cu.UserId == studentId)
+                .Select(cu => cu.ClassId)
+                .ToList();
+
+            // Get subjects for the student
+            var studentSubjects = _context.SubjectUsers
+                .Where(su => su.UserId == studentId)
+                .Select(su => su.SubjectId)
+                .ToList();
+
+            // Get exams that the student has taken
+            var userExams = _context.UserExams
+                .Where(ue => ue.UserId == studentId)
+                .Select(ue => new { ue.ExamId, ue.CorrectAnswer })
+                .ToList();
+
+            var examInfoDict = userExams.ToDictionary(x => x.ExamId, x => x.CorrectAnswer);
+
+            var now = DateTime.Now;
+
+            var query = _context.Exams
+                .Where(e => e.IsDelete != true
+                    && studentClasses.Contains(e.ClassId ?? 0)
+                    && studentSubjects.Contains(e.SubjectId ?? 0)
+                    && examInfoDict.Keys.Contains(e.ExamId))
+                .Select(e => new StudentExamListViewModel
+                {
+                    ExamId = e.ExamId,
+                    ExamName = e.ExamName,
+                    StartDate = e.StartDate,
+                    EndDate = e.EndDate,
+                    Duration = e.Duration,
+                    TotalQuestion = e.TotalQuestion,
+                    CorrectAnswers = examInfoDict.ContainsKey(e.ExamId) ? examInfoDict[e.ExamId] : null
                 });
 
             if (!string.IsNullOrEmpty(searchQuery))
