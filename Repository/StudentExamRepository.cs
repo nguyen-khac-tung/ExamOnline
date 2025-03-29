@@ -1,5 +1,6 @@
 ﻿using ExamationOnline.Areas.Student.ViewModels;
 using ExamationOnline.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExamationOnline.Repository
 {
@@ -8,6 +9,7 @@ namespace ExamationOnline.Repository
         List<StudentExamListViewModel> GetCurrentExams(int studentId, string searchQuery,
             string sortColumn, bool isAsc, int pageSize, int pageNumber, out int totalRecords);
         bool HasStudentTakenExam(int studentId, string examId);
+        Exam? GetExamById(string examId);
     }
 
     public class StudentExamRepository : IStudentExamRepository
@@ -106,6 +108,14 @@ namespace ExamationOnline.Repository
         public bool HasStudentTakenExam(int studentId, string examId)
         {
             return _context.UserExams.Any(ue => ue.UserId == studentId && ue.ExamId == examId);
+        }
+
+        public Exam? GetExamById(string examId)
+        {
+            return _context.Exams
+                .Include(e => e.Class)
+                .Include(e => e.Subject)
+                .FirstOrDefault(e => e.ExamId == examId);
         }
     }
 }

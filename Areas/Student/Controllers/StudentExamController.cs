@@ -1,6 +1,7 @@
 ﻿using ExamationOnline.Areas.Student.ViewModels;
 using ExamationOnline.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExamationOnline.Areas.Student.Controllers
 {
@@ -8,10 +9,12 @@ namespace ExamationOnline.Areas.Student.Controllers
     public class StudentExamController : Controller
     {
         private readonly IStudentExamRepository _studentExamRepository;
+        private readonly IExamRepository _examRepository;
 
-        public StudentExamController(IStudentExamRepository studentExamRepository)
+        public StudentExamController(IStudentExamRepository studentExamRepository, IExamRepository examRepository)
         {
             _studentExamRepository = studentExamRepository;
+            _examRepository = examRepository;
         }
 
         public IActionResult ListCurrentExam()
@@ -52,6 +55,19 @@ namespace ExamationOnline.Areas.Student.Controllers
             };
 
             return PartialView("_ExamListPartial", model);
+        }
+
+        [HttpGet]
+        public IActionResult ConfirmTakeExam(string id)
+        {
+            var exam = _examRepository.GetExamById(id);
+            if (exam == null)
+            {
+                TempData["ErrorMessage"] = "Exam not found.";
+                return RedirectToAction("ListCurrentExam");
+            }
+
+            return View(exam);
         }
     }
 }
