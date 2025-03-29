@@ -69,5 +69,123 @@ namespace ExamationOnline.Areas.Student.Controllers
 
             return View(exam);
         }
+
+        [HttpGet]
+        public IActionResult TakeExam(string id)
+        {
+            int studentId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var exam = _studentExamRepository.GetExamWithQuestions(id);
+
+            if (exam.StartDate > DateTime.Now || exam.EndDate < DateTime.Now)
+            {
+                TempData["ErrorMessage"] = "The exam is not currently available.";
+                return RedirectToAction("ListCurrentExam");
+            }
+
+            var userExam = new Models.UserExam
+            {
+                UserId = studentId,
+                ExamId = id,
+                StartTime = DateTime.Now,
+                TimeTaken = 0,
+                StatusId = 2, // In Progress
+                CorrectAnswer = 0
+            };
+
+            _studentExamRepository.CreateUserExam(userExam);
+
+            var model = new TakeExamViewModel
+            {
+                ExamId = exam.ExamId,
+                ExamName = exam.ExamName,
+                Duration = exam.Duration,
+                TotalQuestions = exam.TotalQuestion ?? 0,
+                EndTime = exam.EndDate,
+                Questions = exam.ExamQuestions.Select(eq => new ExamQuestionViewModel
+                {
+                    QuestionId = eq.QuestionId,
+                    Content = eq.Question.Content,
+                    Options = eq.Question.Options.Select(o => new ExamOptionViewModel
+                    {
+                        OptionId = o.OptionId,
+                        Content = o.Content
+                    }).ToList()
+                }).ToList()
+            };
+
+            HttpContext.Session.SetString("ExamStartTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult SubmitExam(SubmitExamViewModel model)
+        {
+            int studentId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var exam = _studentExamRepository.GetExamWithQuestions(model.ExamId);
+
+            var userExam = _studentExamRepository.GetUserExam(studentId, model.ExamId);
+
+            string startTimeStr = HttpContext.Session.GetString("ExamStartTime");
+            DateTime endTime = DateTime.Now;
+            userExam.EndTime = endTime;
+            if (DateTime.TryParse(startTimeStr, out DateTime startTime))
+            {
+                TimeSpan timeTaken = endTime - startTime;
+                userExam.TimeTaken = (int)timeTaken.TotalMinutes;
+            }
+
+            // Lưu các câu trả lời của người dùng
+            int correctAnswers = 0;
+            if (model.Answers != null)
+            {
+                foreach (var answer in model.Answers)
+                {
+                    // Lưu câu trả lời
+                    var userAnswer = new Models.UserAnswer
+                    {
+                        UserId = studentId,
+                        ExamId = model.ExamId,
+                        QuestionId = answer.QuestionId,
+                        OptionId = answer.SelectedOptionId
+                    };
+                    _studentExamRepository.SaveUserAnswer(userAnswer);
+
+                    // Kiểm tra đáp án đúng
+                    var question = exam.ExamQuestions.FirstOrDefault(eq => eq.QuestionId == answer.QuestionId)?.Question;
+                    if (question != null)
+                    {
+                        var correctOption = question.Options.FirstOrDefault(o => o.IsCorrect == true);
+                        if (correctOption != null && correctOption.OptionId == answer.SelectedOptionId)
+                        {
+                            correctAnswers++;
+                        }
+                    }
+                }
+            }
+
+            // Cập nhật UserExam
+            userExam.CorrectAnswer = correctAnswers;
+            userExam.StatusId = 1; // Completed
+            _studentExamRepository.UpdateUserExam(userExam);
+
+            // Chuyển tới trang kết quả
+            return RedirectToAction("OverviewResult", new { id = model.ExamId });
+        }
+
+        [HttpGet]
+        public IActionResult OverviewResult(string id)
+        {
+            int studentId = HttpContext.Session.GetInt32("UserId") ?? 0;
+
+            var result = _studentExamRepository.GetExamResult(studentId, id);
+            if (result == null)
+            {
+                TempData["ErrorMessage"] = "Exam result not found.";
+                return RedirectToAction("ListCurrentExam");
+            }
+
+            return View(result);
+        }
     }
 }

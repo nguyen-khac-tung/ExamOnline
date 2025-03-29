@@ -1,1 +1,140 @@
-﻿
+﻿@model ExamationOnline.Areas.Student.ViewModels.TakeExamViewModel
+
+@{
+    ViewData["Title"] = "Take Exam";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="pagetitle mb-sm-0 fw600">@Model.ExamName</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center py-3">
+                <p class="mb-0"><strong>Total Questions:</strong> @Model.TotalQuestions</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center py-3">
+                <p class="mb-0 fw-bold" id="answeredQuestions">Answered: 0/@Model.TotalQuestions</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center py-3">
+                <p class="mb-0 fw-bold text-danger" id="examTimer">Time Remaining: <span id="timer"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="examForm" method="post" action="/Student/StudentExam/SubmitExam">
+    <input type="hidden" name="ExamId" value="@Model.ExamId" />
+
+    <div class="exam-questions">
+        @for (int i = 0; i < Model.Questions.Count; i++)
+        {
+            var question = Model.Questions[i];
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Question @(i + 1): @question.Content</h5>
+                </div>
+                <div class="card-body">
+                    <input type="hidden" name="Answers[@i].QuestionId" value="@question.QuestionId" />
+
+                    @foreach (var option in question.Options)
+                    {
+                        <div class="form-check mb-3">
+                            <input class="form-check-input option-radio"
+                                   type="radio"
+                                   name="Answers[@i].SelectedOptionId"
+                                   id="option_@(question.QuestionId)_@(option.OptionId)"
+                                   value="@option.OptionId"
+                                   data-question-index="@i">
+                            <label class="form-check-label" for="option_@(question.QuestionId)_@(option.OptionId)">
+                                @option.Content
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="text-center mt-4 mb-5">
+        <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn">Submit Exam</button>
+    </div>
+</form>
+
+@section ScriptOptional {
+    <script>
+        $(document).ready(function () {
+            // Cập nhật số câu hỏi đã trả lời
+            function updateAnsweredQuestions() {
+                var answered = $('input.option-radio:checked').length;
+                var total = @Model.TotalQuestions;
+                $('#answeredQuestions').text('Answered: ' + answered + '/' + total);
+            }
+
+            // Khi chọn radio button
+            $(document).on('change', '.option-radio', function () {
+                updateAnsweredQuestions();
+            });
+
+            // Timer countdown
+            function startTimer(duration, endTime) {
+                var timer = duration * 60;
+                var now = Math.floor(Date.now() / 1000);
+                var serverEndTime = Math.floor(new Date(endTime).getTime() / 1000);
+
+                // Nếu thời gian kết thúc < thời gian hiện tại + thời hạn làm bài
+                // Thì dùng thời gian kết thúc làm mốc
+                var actualEndTime = Math.min(now + timer, serverEndTime);
+                var remainingTime = actualEndTime - now;
+
+                var interval = setInterval(function () {
+                    var minutes = parseInt(remainingTime / 60, 10);
+                    var seconds = parseInt(remainingTime % 60, 10);
+
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                    $('#timer').text(minutes + ":" + seconds);
+
+                    if (--remainingTime < 0) {
+                        clearInterval(interval);
+                        $('#timer').text("00:00");
+                        alert("Time's up! Submitting your exam now.");
+                        $('#examForm').submit();
+                    }
+                }, 1000);
+            }
+
+            // Xác nhận trước khi nộp bài
+            $('#examForm').on('submit', function (e) {
+                if (!confirm('Are you sure you want to submit the exam? This action cannot be undone.')) {
+                    e.preventDefault();
+                }
+            });
+
+            // Loại bỏ cảnh báo khi submit form
+            $('#examForm').on('submit', function () {
+                $(window).off('beforeunload');
+            });
+
+            // Bắt đầu timer
+            startTimer(@Model.Duration, '@Model.EndTime?.ToString("yyyy-MM-ddTHH:mm:ss")');
+
+            // Cập nhật số câu hỏi đã trả lời ban đầu
+            updateAnsweredQuestions();
+        });
+    </script>
+}

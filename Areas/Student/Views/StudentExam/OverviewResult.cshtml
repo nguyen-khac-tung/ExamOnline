@@ -1,98 +1,92 @@
-﻿
+﻿@model ExamationOnline.Areas.Student.ViewModels.ExamResultViewModel
+
 <div class="row">
     <div class="col-12">
-        <div style="--bs-breadcrumb-divider: '>';">
-            <ol class="breadcrumb m-0">
-                <li class="breadcrumb-item fw-normal">
-                    <a class="color-primarycolor opacity-50"
-                       href="/studentexam/pastexam">Past Exams</a>
-                </li>
-                <li class="breadcrumb-item fw-normal active">Test20250324 Result</li>
-            </ol>
-        </div>
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between pt-2">
-            <h4 class="pagetitle mb-sm-0 fw600">Test20250324 Result</h4>
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="pagetitle mb-sm-0 fw600">Exam Results</h4>
+            <a href="/Student/StudentExam/ListPastExam" class="btn btn-secondary">
+                Back to Past Exams
+            </a>
         </div>
     </div>
 </div>
 
 <section class="section mt-3">
     <div class="bg-white rounded p-3 p-lg-4 p-xl-5 shadow">
-        <div class="row">
+        <h2 class="fs-20 fw600 mb-4">@Model.ExamName - Results</h2>
+
+        <div class="row mb-4">
             <div class="col-md-6">
                 <div class="mb-3 text-break">
-                    <div><label class="fw600" for="ResultView_ExamName">Exam Name</label></div>
-                    <div>Test20250324</div>
+                    <div><label class="fw600">Start Time:</label> @Model.StartTime.ToString("dd/MM/yyyy HH:mm")</div>
+                </div>
+                <div class="mb-3 text-break">
+                    <div><label class="fw600">End Time:</label> @Model.EndTime.ToString("dd/MM/yyyy HH:mm")</div>
+                </div>
+                <div class="mb-3 text-break">
+                    <div><label class="fw600">Time Taken:</label> @Model.TimeTaken minutes</div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="mb-3 text-break">
-                    <div><label class="fw600" for="ResultView_StudentName">Student Name</label></div>
-                    <div>abcabc</div>
+                    <div><label class="fw600">Total Questions:</label> @Model.TotalQuestions</div>
+                </div>
+                <div class="mb-3 text-break">
+                    <div><label class="fw600">Correct Answers:</label> @Model.CorrectAnswers</div>
+                </div>
+                <div class="mb-3 text-break">
+                    <div><label class="fw600">Score:</label> @(Model.TotalQuestions > 0 ? Math.Round((double)Model.CorrectAnswers / Model.TotalQuestions * 10, 2) : 0)/10</div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3 text-break">
-                    <div><label class="fw600" for="ResultView_Passed">Result Status</label></div>
-                    <div>
-                        <span class="badge bg-success text-black fw500 fs-13">Passed</span>
+
+        @if (Model.DisplayAnswers)
+        {
+            <h3 class="fs-18 fw600 mb-3 mt-4">Detailed Results</h3>
+
+            @foreach (var answer in Model.Answers)
+            {
+                <div class="card mb-4 @(answer.IsCorrect ? "border-success" : "border-danger")">
+                    <div class="card-header @(answer.IsCorrect ? "bg-success text-white" : "bg-danger text-white")">
+                        <h5 class="mb-0">Question: @answer.QuestionContent</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <strong>Your Answer:</strong>
+                            @if (answer.SelectedOptionId.HasValue)
+                            {
+                                <span class="@(answer.IsCorrect ? "text-success" : "text-danger")">@answer.SelectedOptionContent</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">No answer selected</span>
+                            }
+                        </div>
+
+                        @if (!answer.IsCorrect)
+                        {
+                            <div class="mb-2">
+                                <strong>Correct Answer:</strong>
+                                <span class="text-success">@answer.CorrectOptionContent</span>
+                            </div>
+                        }
                     </div>
                 </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">
+                Detailed answers for this exam are not available for review.
             </div>
-            <div class="col-md-6">
-                <div class="mb-3 text-break">
-                    <div><label class="fw600" for="ResultView_ScoreToPass">Score To Pass</label></div>
-                    <div>50.00</div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3 text-break">
-                    <div><label class="fw600" for="ResultView_YourScore">Your Score</label></div>
-                    <div>60 / 100.00</div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-3 text-break">
-                    <div><label class="fw600" for="ResultView_AnsweredCorrect">Answered Correct</label></div>
-                    <div>4 / 6</div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3 text-break">
-                    <div><label class="fw600" for="ResultView_StartDateTime">Start Date &amp; Time</label></div>
-                    <div class="datetimetext">2025-03-29T07:30</div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-3 text-break">
-                    <div><label class="fw600" for="ResultView_EndDateTime">End Date &amp; Time</label></div>
-                    <div class="datetimetext">2025-03-29T07:34</div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3 text-break">
-                    <div><label class="fw600" for="ResultView_TimeTaken">Time Taken</label></div>
-                    <div>3.7 Minutes</div>
-                </div>
-            </div>
-        </div>
+        }
     </div>
+
     <div class="row mt-4">
-        <div class="col-12">
-            <a class="btn form-btn btn-secondary hover-boxshadow me-1" href="/studentexam/pastexam">
-                Back To
-                List
+        <div class="col-12 text-center">
+            <a href="/Student/StudentExam/ListPastExam" class="btn btn-primary">
+                Back to Past Exams
             </a>
-            <span class="btn form-btn btn-primary hover-boxshadow cursor-pointer me-1"
-                  onclick="window.print()">Print Result</span>
         </div>
     </div>
 </section>

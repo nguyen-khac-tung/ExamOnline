@@ -276,9 +276,7 @@ public partial class ExamOnlineContext : DbContext
         {
             entity.ToTable("UserExam");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.EndTime).HasColumnType("datetime");
             entity.Property(e => e.ExamId)
                 .HasMaxLength(36)

@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - ExamEase</title>
+    <meta name="description" content="Online examination platform">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="~/areas/font/googleapis/css2.css?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="~/areas/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/areas/css/all.min.css" />
+    <link rel="stylesheet" href="~/areas/css/style.css?v=1.1.8" />
+    <style>
+        body {
+            background-color: #f6f9ff;
+            min-height: 100vh;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .exam-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .exam-header {
+            border-radius: 8px;
+        }
+
+        .questions-container {
+            margin-bottom: 40px;
+        }
+
+        .form-check-input:checked {
+            background-color: #4154f1;
+            border-color: #4154f1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        @RenderBody()
+    </div>
+
+    <script src="~/areas/js/jquery-3.6.0.js"></script>
+    <script src="~/areas/js/popper.min.js"></script>
+    <script src="~/areas/js/bootstrap.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
