@@ -10,10 +10,13 @@ namespace ExamationOnline.Repository
             string sortColumn, bool isAsc, int pageSize, int pageNumber, out int totalRecords);
         Exam? GetExamDetailWithQuestions(string examId);
         void DeleteExam(string examId);
-        string CreateExam(ExamCreateViewModel model);
+        string CreateExam(ExamViewModel model);
         Exam GetExamById(string examId);
         List<string> GetSelectedQuestionIds(string examId);
         void UpdateExamQuestions(string examId, List<string> questionIds);
+        bool IsExamTakenByAnyStudent(string examId);
+        ExamViewModel GetExamViewModelForEdit(string examId);
+        int? UpdateExam(ExamViewModel model);
     }
 
     public class ExamRepository : IExamRepository
@@ -116,7 +119,7 @@ namespace ExamationOnline.Repository
             _context.SaveChanges();
         }
 
-        public string CreateExam(ExamCreateViewModel model)
+        public string CreateExam(ExamViewModel model)
         {
             string examId = Guid.NewGuid().ToString();
 
@@ -179,6 +182,63 @@ namespace ExamationOnline.Repository
             exam.TotalQuestion = questionIds.Count;
 
             _context.SaveChanges();
+        }
+
+        public bool IsExamTakenByAnyStudent(string examId)
+        {
+            return _context.UserExams.Any(ue => ue.ExamId == examId);
+        }
+
+        public ExamViewModel GetExamViewModelForEdit(string examId)
+        {
+            var exam = _context.Exams.Find(examId);
+            bool isExamTaken = IsExamTakenByAnyStudent(examId);
+
+            var model = new ExamViewModel
+            {
+                ExamId = exam.ExamId,
+                ExamName = exam.ExamName,
+                StartDate = exam.StartDate,
+                EndDate = exam.EndDate,
+                Duration = exam.Duration,
+                ClassId = exam.ClassId,
+                SubjectId = exam.SubjectId,
+                IsDisplayAnswer = exam.IsDisplayAnswer ?? false,
+                StatusId = exam.StatusId,
+                IsExamTaken = isExamTaken,
+            };
+
+            return model;
+        }
+
+        public int? UpdateExam(ExamViewModel model)
+        {
+            var oldExam = _context.Exams.Find(model.ExamId);
+
+            // These fields can always be updated
+            oldExam.ExamName = model.ExamName;
+            oldExam.EndDate = model.EndDate;
+            oldExam.Duration = model.Duration;
+            oldExam.IsDisplayAnswer = model.IsDisplayAnswer;
+
+            // If exam is not taken or completed, we can update all fields
+            if (model.IsExamTaken == false)
+            {
+                oldExam.StartDate = model.StartDate;
+                oldExam.ClassId = model.ClassId;
+                oldExam.SubjectId = model.SubjectId;
+            }
+
+            // Update status based on start date
+            if (model.StartDate > DateTime.Now)
+                oldExam.StatusId = 3; // Upcoming
+            else if (model.EndDate < DateTime.Now)
+                oldExam.StatusId = 1; // Ended
+            else 
+                oldExam.StatusId = 2; // In progress
+
+            _context.SaveChanges();
+            return oldExam.StatusId;
         }
     }
 }

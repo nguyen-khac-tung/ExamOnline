@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="pagetitle mb-sm-0 fw600">Create Exam</h4>
+            <h4 class="pagetitle mb-sm-0 fw600">Edit Exam</h4>
             <a href="/Lecture/Exam/List" class="btn btn-secondary">
                 Back to List
             </a>
@@ -12,8 +12,20 @@
 </div>
 
 <section class="section dashboard mt-3">
-    <form asp-action="Create" method="post">
+    @if (Model.IsExamTaken == true)
+    {
+        <div class="alert alert-warning">
+            <p class="mb-0"><strong>Note:</strong> This exam has already been taken by students.</p>
+            <p class="mb-0">You can only edit the exam name, end date, duration, and answer display settings.</p>
+        </div>
+    }
+
+    <form asp-action="Edit" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="ExamId" />
+        <input type="hidden" asp-for="IsExamTaken" />
+        <input type="hidden" asp-for="StatusId" />
+
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -24,14 +36,15 @@
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <label asp-for="ExamName" class="form-label fw600">Exam Name <span class="text-danger">*</span></label>
-                                    <input asp-for="ExamName" class="form-control" placeholder="Enter exam name (5-100 characters)">
+                                    <input asp-for="ExamName" class="form-control" placeholder="Enter exam name (10-100 characters)">
                                     <span asp-validation-for="ExamName" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <label asp-for="StartDate" class="form-label fw600">Start Date & Time <span class="text-danger">*</span></label>
-                                    <input asp-for="StartDate" type="datetime-local" class="form-control">
+                                    <input asp-for="StartDate" type="datetime-local" class="form-control"
+                                           readonly="@(Model.IsExamTaken)">
                                     <span asp-validation-for="StartDate" class="text-danger"></span>
                                 </div>
                             </div>
@@ -40,10 +53,12 @@
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <label asp-for="ClassId" class="form-label fw600">Class <span class="text-danger">*</span></label>
-                                    <select asp-for="ClassId" class="form-select">
-                                        @foreach (var item in Model?.ClassList)
+                                    <select asp-for="ClassId" class="form-select"
+                                            disabled="@(Model.IsExamTaken)">
+                                        <option value="">-- Select Class --</option>
+                                        @foreach (var item in Model.ClassList)
                                         {
-                                            <option value="@item.ClassId" selected="@(Model?.ClassId == item.ClassId)">
+                                            <option value="@item.ClassId" selected="@(Model.ClassId == item.ClassId)">
                                                 @item.ClassName
                                             </option>
                                         }
@@ -63,10 +78,12 @@
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <label asp-for="SubjectId" class="form-label fw600">Subject <span class="text-danger">*</span></label>
-                                    <select asp-for="SubjectId" class="form-select">
-                                        @foreach (var item in Model?.SubjectList)
+                                    <select asp-for="SubjectId" class="form-select"
+                                            disabled="@(Model.IsExamTaken)">
+                                        <option value="">-- Select Subject --</option>
+                                        @foreach (var item in Model.SubjectList)
                                         {
-                                            <option value="@item.SubjectId" selected="@(Model?.SubjectId == item.SubjectId)">
+                                            <option value="@item.SubjectId" selected="@(Model.SubjectId == item.SubjectId)">
                                                 @item.SubjectName
                                             </option>
                                         }
@@ -77,7 +94,7 @@
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <label asp-for="Duration" class="form-label fw600">Duration (minutes) <span class="text-danger">*</span></label>
-                                    <input asp-for="Duration" type="number" class="form-control">
+                                    <input asp-for="Duration" type="number" class="form-control" min="1">
                                     <span asp-validation-for="Duration" class="text-danger"></span>
                                 </div>
                             </div>
@@ -91,8 +108,35 @@
                                         <label class="form-check-label">Yes</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input asp-for="IsDisplayAnswer" class="form-check-input" type="radio" value="false" checked>
+                                        <input asp-for="IsDisplayAnswer" class="form-check-input" type="radio" value="false">
                                         <label class="form-check-label">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label class="form-label fw600">Status Exam</label>
+                                    <div>
+                                        @{
+                                            string badgeClass = "bg-secondary";
+                                            string statusText = "Unknown";
+                                            if (Model.StatusId == 1)
+                                            {
+                                                badgeClass = "bg-danger";
+                                                statusText = "Ended";
+                                            }
+                                            else if (Model.StatusId == 2)
+                                            {
+                                                badgeClass = "bg-warning";
+                                                statusText = "In Progress";
+                                            }
+                                            else if (Model.StatusId == 3)
+                                            {
+                                                badgeClass = "bg-primary";
+                                                statusText = "Upcoming";
+                                            }
+                                        }
+                                        <span class="badge @badgeClass">@statusText</span>
                                     </div>
                                 </div>
                             </div>
@@ -105,9 +149,15 @@
         <div class="row mt-4">
             <div class="col-12 text-center">
                 <button type="submit" class="btn btn-primary me-2">
-                    Save & Continue
+                    Save Changes
                 </button>
-                <a href="/Lecture/Exam/List" class="btn btn-secondary">
+                @if (Model.IsExamTaken == false)
+                {
+                    <a href="/Lecture/Exam/AddQuestion/@Model.ExamId" class="btn btn-success me-2">
+                        Edit Questions
+                    </a>
+                }
+                <a href="/Lecture/Exam/Detail/@Model.ExamId" class="btn btn-secondary">
                     Cancel
                 </a>
             </div>

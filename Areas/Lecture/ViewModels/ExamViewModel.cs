@@ -29,7 +29,7 @@ namespace ExamationOnline.Areas.Lecture.ViewModels
         public bool IsAscending { get; set; }
     }
 
-    public class ExamCreateViewModel
+    public class ExamViewModel
     {
         public string? ExamId { get; set; }
 
@@ -49,10 +49,8 @@ namespace ExamationOnline.Areas.Lecture.ViewModels
         [Range(1, int.MaxValue, ErrorMessage = "Duration must be a positive integer")]
         public int Duration { get; set; }
 
-        [Required(ErrorMessage = "Class is required")]
         public int? ClassId { get; set; }
 
-        [Required(ErrorMessage = "Subject is required")]
         public int? SubjectId { get; set; }
 
         public bool IsDisplayAnswer { get; set; } = false;
@@ -64,6 +62,9 @@ namespace ExamationOnline.Areas.Lecture.ViewModels
         // For dropdown lists
         public List<Class>? ClassList { get; set; }
         public List<Subject>? SubjectList { get; set; }
+
+        // Additional properties to track state
+        public bool? IsExamTaken { get; set; } // Has any student taken the exam?
     }
 
     public class AddQuestionViewModel

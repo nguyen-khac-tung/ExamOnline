@@ -79,7 +79,7 @@ namespace ExamationOnline.Areas.Lecture.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var model = new ExamCreateViewModel
+            var model = new ExamViewModel
             {
                 StartDate = null,
                 EndDate = null,
@@ -90,12 +90,12 @@ namespace ExamationOnline.Areas.Lecture.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ExamCreateViewModel model)
+        public IActionResult Create(ExamViewModel model)
         {
             model.ClassList = _classRepository.GetListClass();
             model.SubjectList = _subjectRepository.GetListSubject();
 
-            if(model.StartDate.Value < DateTime.Now)
+            if (model.StartDate.Value < DateTime.Now)
             {
                 ModelState.AddModelError("StartDate", "Start date cannot be in the past");
             }
@@ -115,6 +115,43 @@ namespace ExamationOnline.Areas.Lecture.Controllers
             string examId = _examRepository.CreateExam(model);
 
             return RedirectToAction("AddQuestion", new { id = examId });
+        }
+
+        [HttpGet]
+        public IActionResult Edit(string id)
+        {
+            var model = _examRepository.GetExamViewModelForEdit(id);
+            model.ClassList = _classRepository.GetListClass();
+            model.SubjectList = _subjectRepository.GetListSubject();
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(ExamViewModel model)
+        {
+            model.ClassList = _classRepository.GetListClass();
+            model.SubjectList = _subjectRepository.GetListSubject();
+
+            if (model.IsExamTaken == false)
+            {
+                if (model.StartDate.Value < DateTime.Now)
+                {
+                    ModelState.AddModelError("StartDate", "Start date cannot be in the past");
+                }
+            }
+
+            if (model.StartDate.Value.AddMinutes(model.Duration) >= model.EndDate)
+            {
+                ModelState.AddModelError("EndDate", "End date must be greater than Start date plus Duration");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            model.StatusId = _examRepository.UpdateExam(model);
+            return View(model);
         }
 
         [HttpGet]
