@@ -1,6 +1,4 @@
-﻿
-
-<div class="row">
+﻿<div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
             <h4 class="pagetitle mb-sm-0 fw600">Current Exams</h4>
@@ -11,7 +9,7 @@
 <section class="section dashboard mt-3">
     <div class="bg-white rounded p-3 shadow position-relative h-100 w-100">
         <div class="pb-2">
-            <span onclick="exportToExcel('exam', 'Please wait. Table is still loading. Click this after table is loaded.')"
+            @* <span onclick="exportToExcel('exam', 'Please wait. Table is still loading. Click this after table is loaded.')"
                   data-bs-toggle="tooltip" data-bs-placement="right"
                   title="You can control what you want to export to Excel before clicking this. For example, if you wish to export all the records, click &quot;Show All&quot; at the drop-down button below before clicking &quot;Export to Excel.&quot;"
                   class="btn form-btn btn-secondary hover-boxshadow cursor-pointer hover-moveup">
@@ -22,7 +20,7 @@
                   title="You can control what you want to export to PDF before clicking this. For example, if you wish to export all the records, click &quot;Show All&quot; at the drop-down button below before clicking &quot;Export to PDF.&quot;"
                   class="btn form-btn btn-secondary hover-boxshadow cursor-pointer hover-moveup">
                 <i class="fa-solid fa-file-pdf pe-1"></i> Export to Pdf
-            </span>
+            </span> *@
         </div>
         <div class="spinner-container d-none">
             <div class="spinner d-flex justify-content-center align-items-center text-center color-primarycolor py-5">
@@ -54,3 +52,103 @@
         </div>
     </div>
 </section>
+
+@section ScriptOptional {
+    <script>
+        $(document).ready(function () {
+            // Khởi tạo biến lưu trạng thái hiện tại
+            let currentState = {
+                search: "",
+                page: 1,
+                pageSize: 5,
+                sortBy: "",
+                sortDir: "desc"
+            };
+
+            // Tải dữ liệu ban đầu
+            loadExamData();
+
+            // Sự kiện tìm kiếm
+            $(document).on("click", "#btnSearch", function () {
+                currentState.search = $("#searchInput").val();
+                currentState.page = 1;
+                loadExamData();
+            });
+
+            // Tìm kiếm khi nhấn Enter
+            $(document).on("keypress", "#searchInput", function (e) {
+                if (e.which === 13) {
+                    currentState.search = $(this).val();
+                    currentState.page = 1;
+                    loadExamData();
+                    return false; // Ngăn form submit nếu có
+                }
+            });
+
+            // Thay đổi số lượng bản ghi trên trang
+            $(document).on("change", "#pageSizeSelect", function () {
+                currentState.pageSize = $(this).val();
+                currentState.page = 1;
+                loadExamData();
+            });
+
+            // Sự kiện sắp xếp
+            $(document).on("click", ".sortable", function () {
+                const column = $(this).data("sort");
+
+                // Nếu là cùng một cột, đảo chiều sắp xếp
+                if (currentState.sortBy === column) {
+                    currentState.sortDir = currentState.sortDir === "asc" ? "desc" : "asc";
+                } else {
+                    // Nếu là cột khác, đặt là cột mới và sắp xếp tăng dần
+                    currentState.sortBy = column;
+                    currentState.sortDir = "asc";
+                }
+
+                loadExamData();
+            });
+
+            // Sự kiện phân trang
+            $(document).on("click", ".pagination .page-link", function () {
+                const page = $(this).data("page");
+                if (page && !$(this).parent().hasClass("disabled")) {
+                    currentState.page = page;
+                    loadExamData();
+                }
+            });
+
+            // Hàm tải dữ liệu sử dụng Ajax
+            function loadExamData() {
+                $(".spinner-container").removeClass("d-none");
+
+                $.ajax({
+                    url: "/Student/StudentExam/GetPartialViewListing",
+                    type: "GET",
+                    data: {
+                        search: currentState.search,
+                        page: currentState.page,
+                        pageSize: currentState.pageSize,
+                        sortBy: currentState.sortBy,
+                        sortDir: currentState.sortDir
+                    },
+                    success: function (data) {
+                        $("#exam-partialview").html(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error loading exams:", error);
+
+                        // Hiển thị thông báo lỗi
+                        $('.toast-body').html("Error loading exams. Please try again.");
+                        $('#notifytoast').removeClass('bg-info').addClass('bg-danger');
+                        $('.toast-header').removeClass('bg-info').addClass('bg-danger');
+                        var toast = new bootstrap.Toast(document.getElementById('notifytoast'));
+                        toast.show();
+                    },
+                    complete: function () {
+                        $(".spinner-container").addClass("d-none");
+                    }
+                });
+            }
+        });
+    </script>
+}

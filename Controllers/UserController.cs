@@ -38,7 +38,7 @@ namespace ExamationOnline.Controllers
             HttpContext.Session.SetString("UserName", account.FullName);
 
             if (account.Role == "Lecture") { return RedirectToAction("List", "Question", new { area = "Lecture" }); }
-            if (account.Role == "Student") { return RedirectToAction("List", "Exam", new { area = "Student" }); }
+            if (account.Role == "Student") { return RedirectToAction("ListCurrentExam", "StudentExam", new { area = "Student" }); }
 
             return RedirectToAction("Index", "Home");
         }
