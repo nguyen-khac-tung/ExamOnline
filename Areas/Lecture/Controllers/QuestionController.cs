@@ -132,7 +132,7 @@ namespace ExamationOnline.Areas.Lecture.Controllers
                 }
             }
 
-            string questionId = _questionRepository.CreateQuestion(model);
+            string questionId = _questionRepository.UpdateQuestion(model);
             return RedirectToAction("Detail", new { id = questionId });
         }
 

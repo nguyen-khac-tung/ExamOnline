@@ -12,8 +12,9 @@
 </div>
 
 <section class="section dashboard mt-3">
-    <form asp-action="Create" method="post">
+    <form asp-action="Edit" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="QuestionId"/>
         <div class="row">
             <div class="col-12">
                 <div class="card">

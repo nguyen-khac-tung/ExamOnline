@@ -226,12 +226,14 @@
 
         $(document).ready(function () {
             var currentUrl = window.location.pathname;
+            var parts = currentUrl.split('/');
+            var desiredPart = '/' + parts[1] + '/' + parts[2] + '/';
 
             $(".nav-link").removeClass("active");
 
             $(".nav-link").each(function () {
                 var linkUrl = $(this).attr("href");
-                if (currentUrl.includes(linkUrl) && linkUrl !== "/") {
+                if (linkUrl.includes(desiredPart) && linkUrl !== "/") {
                     $(this).addClass("active");
                 }
             });

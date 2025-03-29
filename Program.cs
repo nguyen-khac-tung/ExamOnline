@@ -60,6 +60,8 @@ namespace ExamationOnline
             service.AddTransient<IUserRepository, UserRepository>();
             service.AddTransient<IQuestionRepository, QuestionRepository>();
             service.AddTransient<IExamRepository, ExamRepository>();
+            service.AddTransient<IClassRepository, ClassRepository>();
+            service.AddTransient<ISubjectRepository, SubjectRepository>();
 
             service.AddControllersWithViews();
         }

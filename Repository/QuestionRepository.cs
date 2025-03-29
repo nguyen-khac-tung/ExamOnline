@@ -14,6 +14,7 @@ namespace ExamationOnline.Repository
         string CreateQuestion(QuestionViewModel model);
         QuestionViewModel GetQuestionVMById(string questionId);
         string UpdateQuestion(QuestionViewModel model);
+        List<QuestionListViewModel>? GetAvailableQuestionsForExam(int lectureId);
     }
 
     public class QuestionRepository : IQuestionRepository
@@ -194,5 +195,22 @@ namespace ExamationOnline.Repository
             _context.SaveChanges();
             return model.QuestionId;
         }
+
+        public List<QuestionListViewModel>? GetAvailableQuestionsForExam(int lectureId)
+        {
+            return _context.Questions
+                .Where(q => q.LectureId == lectureId && q.IsDelete != true)
+                .Select(q => new QuestionListViewModel
+                {
+                    QuestionId = q.QuestionId,
+                    Content = q.Content,
+                    Type = q.Type,
+                    CreatedDate = q.CreatedDate,
+                    HasAnswer = q.HasAnswer,
+                    IsActive = q.IsActive
+                })
+                .ToList();
+        }
+
     }
 }

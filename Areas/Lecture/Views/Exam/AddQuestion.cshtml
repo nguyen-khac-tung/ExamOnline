@@ -1,94 +1,198 @@
-﻿<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link hover-color-secondarycolor"
-           href="/exam/edit/9e786b2f-4651-48bd-9fb4-28e70aeebe63">Edit Exam</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active">Add Question</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link hover-color-secondarycolor"
-           href="/exam/sortquestion/9e786b2f-4651-48bd-9fb4-28e70aeebe63">Arrange Question Order</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link hover-color-secondarycolor"
-           href="/exam/allocatemarks/9e786b2f-4651-48bd-9fb4-28e70aeebe63">Allocate Marks</a>
-    </li>
-</ul>
+﻿@model ExamationOnline.Areas.Lecture.ViewModels.AddQuestionViewModel
 
-
-<form action="/exam/addquestion/9e786b2f-4651-48bd-9fb4-28e70aeebe63" class="form-horizontal"
-      enctype="multipart/form-data" method="post" role="form">
-    <input id="Id" name="Id" type="hidden"
-           value="9e786b2f-4651-48bd-9fb4-28e70aeebe63" /><input data-val="true"
-                                                                 data-val-required="Field is required." id="Name" name="Name" type="hidden" value="exam history" /><input data-val="true" data-val-required="Field is required." id="RandomizeQuestions" name="RandomizeQuestions"
-                                                                                                                                                                          type="hidden" value="False" />
-    <section class="section">
-        <div class="bg-white rounded p-3 p-lg-4 p-xl-5 shadow">
-            <h2 class="fs-20 fw600">Add Question for Exam</h2>
-            <div class="mb-4">
-                Please ensure that all questions and answers are correct before the exam starts,
-                as it is not possible to add or delete questions while students are taking the exam. However, if
-                your answer to a question is incorrect, you can still correct it after the exam has ended. The
-                system will regrade the students&#x27; scores automatically.
-            </div>
-            <div class="row gx-1">
-                <div class="alert alert-info">
-                    Total Questions: <span id="totalquestion"></span>
-                </div>
-            </div>
-            <div class="row g-0 position-relative w-100 h-100">
-                <div class="spinner-container d-none">
-                    <div class="spinner d-flex justify-content-center align-items-center text-center color-primarycolor py-5">
-                        <div class="py-3">
-                            <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div><strong>
-                                &nbsp; Loading...
-                            </strong>
-                        </div>
-                    </div>
-                </div>
-                <div id="question-partialview">
-                    <!-- display a dummy empty table while loading the data -->
-                    <div class="table-responsive mb-5">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th class="thead"></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                    <div class="py-4"></div>
-                    <div class="dummyfooter row justify-content-between mt-5">
-                        <div class="col-md-6">Showing 0 to 0 of 0 entries</div>
-                        <div class="col-md-6 text-end">Page 0 of Page 0</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col-12">
-                <button type="submit" class="btn form-btn btn-primary hover-boxshadow">Save</button>
-            </div>
-        </div>
-    </section>
-    <input name="__RequestVerificationToken" type="hidden"
-           value="CfDJ8PhlRww5SZZDgQOdb6RELKw6sIF5LcPRPBWYXG346UrfdexNxkfGCYvMVFDk-mrh7Q8N_rLh9-towJh92z0lRkJ06qUc5rD1RXYuS1J2VydOdHCzO01_6YQ8ap9e0VbBkPebku7G5m6nHX_jvI7snyY2WwbmGOg5oLHPC7MJbD9C1KAGfX57gO3JZGNNwBloZw" />
-</form>
-<div id="questionSelectedtoast-container" class="position-fixed top-0 mx-auto p-4 toast-container">
-    <div id="questionSelectedtoast" class="toast mx-auto bg-info text-white border-0" role="alert"
-         aria-live="assertive" aria-atomic="true">
-        <div class="toast-header justify-content-between bg-info text-white border-bottom-0">
-            <div class="text-white">
-                <i class="fa-solid fa-circle-check pe-1"></i> <strong class="me-auto">Total Questions:</strong>
-            </div>
-            <button type="button" class="text-end border-0 bg-transparent text-white fs-18 p-0 hover-opacity"
-                    data-bs-dismiss="toast" aria-label="Close">
-                X
-            </button>
-        </div>
-        <div class="toast-body bg-info text-white border-0">
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="pagetitle mb-sm-0 fw600">Add Questions to Exam</h4>
+            <a href="/Lecture/Exam/Edit/@Model.ExamId" class="btn btn-secondary">
+                Back to Exam
+            </a>
         </div>
     </div>
 </div>
+
+<section class="section dashboard mt-3">
+    <form asp-action="AddQuestion" method="post">
+        <input type="hidden" asp-for="ExamId" />
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-4">Add Questions to: @Model.ExamName</h5>
+
+                <div class="alert alert-info">
+                    <p>Please select questions to add to this exam. You must select at least one question.</p>
+                    <p class="mb-0"><strong>Note:</strong> Only active questions with answers can be selected.</p>
+                </div>
+
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger">
+                        <p class ="mb-0">@TempData["ErrorMessage"]</p>
+                    </div>
+                }
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 id="selectedQuestionsCount" class="badge bg-primary fs-6 p-2">
+                            Question Selected: @(Model.SelectedQuestionIds?.Count ?? 0)
+                        </h5>
+                    </div>
+                    <div class="input-group" style="max-width: 400px;">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search questions...">
+                        <button class="btn btn-outline-primary" type="button" id="btnSearch">
+                            Search
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive" style="max-height: 550px; overflow-y: auto;">
+                    <table class="table table-hover" id="questionTable">
+                        <thead class="table-light position-sticky" style="top: 0; z-index: 1;">
+                            <tr>
+                                <th width="5%"></th>
+                                <th>Question Content</th>
+                                <th width="13%">Type</th>
+                                <th width="12%">Has Answer</th>
+                                <th width="10%">Active</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.AvailableQuestions != null && Model.AvailableQuestions.Any())
+                            {
+                                foreach (var question in Model.AvailableQuestions)
+                                {
+                                    bool isDisabled = question.IsActive != true || question.HasAnswer != true;
+                                    bool isSelected = Model.SelectedQuestionIds.Contains(question.QuestionId);
+
+                                    <tr class="@(isDisabled ? "text-muted" : "")">
+                                        <td class="text-center">
+                                            <div class="form-check">
+                                                <input class="form-check-input question-checkbox fs-20" type="checkbox"
+                                                       name="SelectedQuestionIds" value="@question.QuestionId"
+                                                @(isSelected ? "checked" : "")
+                                                @(isDisabled ? "disabled" : "")>
+                                            </div>
+                                        </td>
+                                        <td class="questionContent">@question.Content</td>
+                                        <td class="questionType">@question.Type</td>
+                                        <td>
+                                            @if (question.HasAnswer == true)
+                                            {
+                                                <span class="badge bg-success">Yes</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">No</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (question.IsActive == true)
+                                            {
+                                                <span class="badge bg-success">Active</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Inactive</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr id="noResultsRow">
+                                    <td colspan="5" class="text-center">No questions available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <a href="/Lecture/Exam/Edit/@Model.ExamId" class="btn btn-secondary me-2">
+                    Back to Exam
+                </a>
+                <button type="submit" class="btn btn-primary me-2">
+                    Save Questions
+                </button>
+                <a href="/Lecture/Exam/Detail/@Model.ExamId" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </div>
+        </div>
+    </form>
+</section>
+
+@section ScriptOptional {
+    <script>
+        $(document).ready(function () {
+            // Flag to track if we have any questions at all
+            var hasNoQuestions = $("#questionTable tbody tr").first().is("#noResultsRow");
+
+            // Update selected count whenever a checkbox is clicked
+            $(document).on("change", ".question-checkbox", function () {
+                updateSelectedCount();
+            });
+
+            function updateSelectedCount() {
+                var count = $(".question-checkbox:checked").length;
+                $("#selectedQuestionsCount").text("Selected: " + count);
+            }
+
+            // Search functionality
+            $(document).on("click", "#btnSearch", function () {
+                searchQuestions();
+            });
+
+            $(document).on("keypress", "#searchInput", function (e) {
+                if (e.which === 13) {
+                    searchQuestions();
+                    return false;
+                }
+            });
+
+            function searchQuestions() {
+                var searchText = $("#searchInput").val().toLowerCase();
+
+                // If we don't have any questions, always show "No questions available"
+                if (hasNoQuestions) {
+                    return;
+                }
+
+                // If search is empty, show all questions
+                if (searchText.trim() === "") {
+                    $("#questionTable tbody tr").not("#noResultsRow").show();
+                    $("#noResultsRow").remove();
+                    return;
+                }
+
+                var visibleCount = 0;
+                $("#questionTable tbody tr").not("#noResultsRow").each(function () {
+                    var content = $(this).find(".questionContent").text().toLowerCase();
+                    var type = $(this).find(".questionType").text().toLowerCase();
+
+                    if (content.includes(searchText) || type.includes(searchText)) {
+                        $(this).show();
+                        visibleCount++;
+                    } else {
+                        $(this).hide();
+                    }
+                });
+
+                // Show "No questions available" if no results found
+                if (visibleCount === 0) {
+                    if ($("#noResultsRow").length === 0) {
+                        $("#questionTable tbody").append('<tr id="noResultsRow"><td colspan="5" class="text-center">No questions available</td></tr>');
+                    } else {
+                        $("#noResultsRow").show();
+                    }
+                } else {
+                    $("#noResultsRow").remove();
+                }
+            }
+        });
+    </script>
+}

@@ -111,9 +111,7 @@ public partial class ExamOnlineContext : DbContext
         {
             entity.ToTable("ExamQuestion");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.ExamId)
                 .HasMaxLength(36)
                 .IsUnicode(false)

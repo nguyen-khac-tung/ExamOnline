@@ -8,11 +8,15 @@ namespace ExamationOnline.Repository
     {
         List<ExamListViewModel> GetExamsByLectureId(int lectureId, string searchQuery,
             string sortColumn, bool isAsc, int pageSize, int pageNumber, out int totalRecords);
+        Exam? GetExamDetailWithQuestions(string examId);
         void DeleteExam(string examId);
-        public Exam? GetExamDetailWithQuestions(string examId);
+        string CreateExam(ExamCreateViewModel model);
+        Exam GetExamById(string examId);
+        List<string> GetSelectedQuestionIds(string examId);
+        void UpdateExamQuestions(string examId, List<string> questionIds);
     }
 
-    public class ExamRepository: IExamRepository
+    public class ExamRepository : IExamRepository
     {
         private readonly ExamOnlineContext _context;
 
@@ -92,13 +96,6 @@ namespace ExamationOnline.Repository
             return query;
         }
 
-        public void DeleteExam(string examId)
-        {
-            var exam = _context.Exams.Find(examId);
-            exam.IsDelete = true;
-            _context.SaveChanges();
-        }
-
         public Exam? GetExamDetailWithQuestions(string examId)
         {
             return _context.Exams
@@ -110,6 +107,78 @@ namespace ExamationOnline.Repository
                     .ThenInclude(eq => eq.Question)
                         .ThenInclude(q => q.Options)
                 .FirstOrDefault(e => e.ExamId == examId);
+        }
+
+        public void DeleteExam(string examId)
+        {
+            var exam = _context.Exams.Find(examId);
+            exam.IsDelete = true;
+            _context.SaveChanges();
+        }
+
+        public string CreateExam(ExamCreateViewModel model)
+        {
+            string examId = Guid.NewGuid().ToString();
+
+            if (model.StartDate > DateTime.Now) model.StatusId = 3;
+            else model.StatusId = 2;
+
+            var exam = new Exam
+            {
+                ExamId = examId,
+                ExamName = model.ExamName,
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
+                Duration = model.Duration,
+                ClassId = model.ClassId,
+                SubjectId = model.SubjectId,
+                IsDisplayAnswer = model.IsDisplayAnswer,
+                StatusId = model.StatusId,
+                LectureId = model.LectureId,
+                CreateDate = DateTime.Now,
+                IsDelete = false,
+                TotalQuestion = 0
+            };
+
+            _context.Exams.Add(exam);
+            _context.SaveChanges();
+            return examId;
+        }
+
+        public Exam? GetExamById(string examId)
+        {
+            return _context.Exams.FirstOrDefault(e => e.ExamId == examId);
+        }
+
+        public List<string> GetSelectedQuestionIds(string examId)
+        {
+            return _context.ExamQuestions
+                .Where(eq => eq.ExamId == examId)
+                .Select(eq => eq.QuestionId)
+                .ToList();
+        }
+
+        public void UpdateExamQuestions(string examId, List<string> questionIds)
+        {
+            var oldListQuestion = _context.ExamQuestions.Where(eq => eq.ExamId == examId);
+            _context.ExamQuestions.RemoveRange(oldListQuestion);
+
+            foreach (var questionId in questionIds)
+            {
+                var eq = new ExamQuestion()
+                {
+                    ExamId = examId,
+                    QuestionId = questionId
+                };
+
+                _context.ExamQuestions.Add(eq);
+            }
+
+            // Update total questions count
+            var exam = _context.Exams.Find(examId);
+            exam.TotalQuestion = questionIds.Count;
+
+            _context.SaveChanges();
         }
     }
 }
